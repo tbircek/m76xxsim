@@ -1,0 +1,15 @@
+doctype html
+html.no-js(lang='en')
+  head
+    block head
+    include include/header.pug
+  body    
+    //- include navbar.pug
+    //- block navbar
+    block content
+    
+    //- footer
+    footer.modal-footer
+      include include/foot.pug
+    block scripts
+      include include/scripts.pug  
