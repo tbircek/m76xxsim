@@ -1,0 +1,18 @@
+block breaker-model
+    div(class='card')
+        div(class='card-header'): h6 Breaker Model
+        div(class='card-body')
+            each item in inputLabels
+                div(class='input-group mb-2')
+                    div(class='input-group-prepend')
+                    label(class='input-group-text', for=item) #{item}  
+                    select(class='custom-select', id=item)          
+                        if ('Input 1:' === item )
+                            each val in fiftyTwoAOptions
+                                option(value=val) #{val}
+                        else if ('Input 2:' === item )
+                            each val in fiftyTwoBOptions
+                                option(value=val) #{val}
+                        else
+                            option(value='error') Error
+            include start-position.pug

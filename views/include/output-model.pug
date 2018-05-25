@@ -1,0 +1,17 @@
+block output-model
+    div(class='card')
+        div(class='card-header'): h6 Output Model
+        div(class='card-body')
+            each item in outputLabels
+                div(class='input-group mb-2')
+                div(class='input-group-prepend')
+                    label(class='input-group-text', for=item) #{item}
+                    select(class='custom-select', id=item)          
+                        if ('Output 1:' === item )
+                            each val in tripOptions
+                                option(value=val) #{val}
+                        else if ('Output 2:' === item )
+                            each val in closeOptions
+                                option(value=val) #{val}
+                        else
+                            option(value='error') Error   

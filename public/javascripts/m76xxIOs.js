@@ -525,6 +525,8 @@ function m76xxIOs(opts) {
     // Wait out for 52b delay time.
     delay(opts.closeTime52bDelay);
     PhA_52b.writeSync(Logic0);
+    
+    // TODO: Close pulse duration time.
 
     // Wait out for 52a delay time.
     delay(opts.closeTime52aDelay);

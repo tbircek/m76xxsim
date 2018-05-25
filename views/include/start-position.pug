@@ -1,0 +1,6 @@
+block start-position
+  div(class='input-group-prepend')
+    label(class='input-group-text', for='Start Position') Position:
+    select(class='custom-select', id='start-position') 
+      each val in cbOptions
+          option(value=val) #{val}
