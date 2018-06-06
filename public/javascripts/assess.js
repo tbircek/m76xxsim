@@ -18,8 +18,8 @@ var assert = require('assert');
 if ('production' === process.env.mode) {
   var nil = function() {};
   module.exports = {
-    equal = nil,
-    notEqual = nil,
+    equal = nil;
+    notEqual = nil;
     // all the other functions
   };
 } else {

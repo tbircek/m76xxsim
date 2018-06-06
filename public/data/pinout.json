@@ -1,0 +1,350 @@
+{
+  "pins": {
+    "version": "2018/4/9",
+    "description": "M76xxsim Project uses following Beaglebone black pins available through expansion headers P8 and P9.",
+    "comment": "Omitted beaglebone used pins by default.",
+    "header": [{
+        "pin": "p8_07",
+        "gpio": 66,
+        "direction": "out",
+        "label": "lcd_rs",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Register Select output."
+      },
+      {
+        "pin": "p8_08",
+        "gpio": 67,
+        "direction": "out",
+        "label": "lcd_en",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Enable Signal output."
+      },
+      {
+        "pin": "p8_09",
+        "gpio": 69,
+        "direction": "out",
+        "label": "lcd_d4",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Data bit 7 output."
+      },
+      {
+        "pin": "p8_10",
+        "gpio": 68,
+        "direction": "out",
+        "label": "lcd_d5",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Data bit 6 output."
+      },
+      {
+        "pin": "p8_11",
+        "gpio": 45,
+        "direction": "out",
+        "label": "lcd_d6",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Data bit 5 output."
+      },
+      {
+        "pin": "p8_12",
+        "gpio": 44,
+        "direction": "out",
+        "label": "lcd_d7",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the LCD Data bit 4 output."
+      },
+      {
+        "pin": "p8_13",
+        "gpio": 23,
+        "direction": "out",
+        "label": "gpio23",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p8_14",
+        "gpio": 26,
+        "direction": "in",
+        "label": "close_pha",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 2. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_15",
+        "gpio": 47,
+        "direction": "in",
+        "label": "trip_pha",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 1. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_16",
+        "gpio": 46,
+        "direction": "in",
+        "label": "close_phb",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 6. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_17",
+        "gpio": 27,
+        "direction": "in",
+        "label": "trip_phb",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 5. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_18",
+        "gpio": 65,
+        "direction": "in",
+        "label": "close_phc",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 8. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_19",
+        "gpio": 22,
+        "direction": "in",
+        "label": "trip_phc",
+        "debounceTime": "0",
+        "edge": "raising",
+        "description": "Connected to the M-76xx Output 7. Input circuit and debounce time provided by B-1713 Actuator board."
+      },
+      {
+        "pin": "p8_26",
+        "gpio": 61,
+        "direction": "out",
+        "label": "gpio61",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p8_27",
+        "gpio": 86,
+        "direction": "out",
+        "label": "gpio86",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p8_28",
+        "gpio": 88,
+        "direction": "out",
+        "label": "phs_a_cls(sw2)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_A_CLS."
+      },
+      {
+        "pin": "p8_29",
+        "gpio": 87,
+        "direction": "out",
+        "label": "phs_b_cls(sw2)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_B_CLS."
+      },
+      {
+        "pin": "p8_30",
+        "gpio": 89,
+        "direction": "out",
+        "label": "phs_c_cls(sw2)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_C_CLS."
+      },
+      {
+        "pin": "p9_11",
+        "gpio": 30,
+        "direction": "out",
+        "label": "pha_52a",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 1 return."
+      },
+      {
+        "pin": "p9_12",
+        "gpio": 60,
+        "direction": "out",
+        "label": "phb_52a",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 6 return."
+      },
+      {
+        "pin": "p9_13",
+        "gpio": 31,
+        "direction": "out",
+        "label": "phc_52a",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 8 return."
+      },
+      {
+        "pin": "p9_14",
+        "gpio": 50,
+        "direction": "out",
+        "label": "neu_gnd_cls(sw2)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431 #2, M-6283A Single Pole Three Phase Adapter signal name PHS_C_CLS."
+      },
+      {
+        "pin": "p9_15",
+        "gpio": 48,
+        "direction": "out",
+        "label": "gpio48",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED. Default voltage = 1.6Vdc."
+      },
+      {
+        "pin": "p9_16",
+        "gpio": 51,
+        "direction": "out",
+        "label": "gpio51",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_17",
+        "gpio": 5,
+        "direction": "out",
+        "label": "gpio5",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_18",
+        "gpio": 4,
+        "direction": "out",
+        "label": "gpio4",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_21",
+        "gpio": 3,
+        "direction": "out",
+        "label": "gpio3",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_22",
+        "gpio": 2,
+        "direction": "out",
+        "label": "gpio2",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_23",
+        "gpio": 49,
+        "direction": "out",
+        "label": "gpio49",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_24",
+        "gpio": 15,
+        "direction": "out",
+        "label": "gpio15",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED."
+      },
+      {
+        "pin": "p9_25",
+        "gpio": 117,
+        "direction": "out",
+        "label": "neu_gnd_opn(sw1)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431 #2, M-6283A Single Pole Three Phase Adapter signal name PHS_C_OPN."
+      },
+      {
+        "pin": "p9_26",
+        "gpio": 14,
+        "direction": "out",
+        "label": "gpio14",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "NOT USED. Default voltage = 1.2Vdc."
+      },
+      {
+        "pin": "p9_27",
+        "gpio": 115,
+        "direction": "out",
+        "label": "pha_52b",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 2 return."
+      },
+      {
+        "pin": "p9_28",
+        "gpio": 113,
+        "direction": "out",
+        "label": "phb_52b",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 7 return."
+      },
+      {
+        "pin": "p9_29",
+        "gpio": 111,
+        "direction": "out",
+        "label": "phc_52b",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the M-76xx Input 9 return."
+      },
+      {
+        "pin": "p9_30",
+        "gpio": 112,
+        "direction": "out",
+        "label": "phs_a_opn(sw1)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_A_OPN."
+      },
+      {
+        "pin": "p9_31",
+        "gpio": 110,
+        "direction": "out",
+        "label": "phs_b_opn(sw1)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_B_OPN."
+      },
+      {
+        "pin": "p9_41",
+        "gpio": 20,
+        "direction": "out",
+        "label": "phs_c_opn(sw1)",
+        "debounceTime": "0",
+        "edge": "none",
+        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_C_OPN."
+      }
+    ]
+  }
+}

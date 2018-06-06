@@ -166,7 +166,7 @@ m76xxIOs.prototype.init = function(phABC52a = true, phABC52b = true, tripABC = t
       }
     });
 
-    Trip_PhA.watch(function(err) { //, value) {
+    this.Trip_PhA.watch(function(err) { //, value) {
       if (err) {
         throw err;
       }

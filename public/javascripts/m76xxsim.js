@@ -18,6 +18,9 @@ if (useLibrary === 1) {
 } else if (useLibrary === 2) {
   var m76xxIOs = require('./m76xxIOs2').m76xxIOs.prototype;
   activeLibrary = library2();
+} else if (useLibrary === 3) {
+  var beagle = require('./m76xxIOs3');
+  activeLibrary = library3();
 } else {
   throw ('invalid library');
 }
@@ -113,6 +116,20 @@ function init() {
   // if no file exists create a new one.
 }
 
+function library3() {
+
+  var Close_PhA = new beagle.SetupInputs('Close_PhA', 26, 'in');
+  var Trip_PhA = new beagle.SetupInputs('Trip_PhA', 47, 'in');
+  var Close_PhB = new beagle.SetupInputs('Close_PhB', 46, 'in');
+  var Trip_PhB = new beagle.SetupInputs('Trip_PhB', 27, 'in');
+  var Close_PhC = new beagle.SetupInputs('Close_PhC', 65, 'in');
+  var Trip_PhC = new beagle.SetupInputs('Trip_PhC', 22, 'in');
+
+
+  console.log('name: %s\t\tgpio: %s\tdirection: %s\tedge: %s\tdebounce: %dms', Close_PhA.name, Close_PhA.gpio, Close_PhA.direction, Close_PhA.edge, Close_PhA.debounceTimeout);
+  console.log('name: %s\t\tgpio: %s\tdirection: %s\tedge: %s\tdebounce: %dms', Trip_PhA.name, Trip_PhA.gpio, Trip_PhA.direction, Trip_PhA.edge, Trip_PhA.debounceTimeout);
+}
+
 function library2() {
   // second library.
   m76xxIOs.init();
@@ -128,8 +145,8 @@ function library1() { // first library.
     ioControl = new IOControl({
       breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
       cbPosition: 'Close', // 'Trip', // 
-      closeDebounceTime: 13, // observed two different pulse width in scope.
-      tripDebounceTime: 13, // observed two different pulse width in scope.
+      closeDebounceTime: 15, // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+      tripDebounceTime: 10, // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds. 
       edge: 'rising', // 'falling', // 'both', // 'none', //
       recloserType: '3ph Ganged', // 'Independent Phase Capable', // 
       operationMode: '3Trip 3Close', // '1Trip 3Close', '1Trip 1Close'
