@@ -1,0 +1,36 @@
+block breaker-model
+    div(class='card')
+      div(class='card-header')
+        h6 Breaker Model
+      div(class='card-body')
+        div(class='card')
+          div(class='card-header')
+            h6 Input 1
+          div(class='card-body')
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged')
+                input(type='radio' id='input1-selection-abc' name='52aOptions' class='custom-control-input' checked action='')
+                label(class='custom-control-label' for='input1-selection-abc') 52a Phases ABC
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Individual Phase')
+                input(type='radio' id='input1-selection-a' name='52aOptions' class='custom-control-input' action='')
+                label(class='custom-control-label' for='input1-selection-a') 52a Phase A
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='52a is not used')
+                input(type='radio' id='input1-selection-general' name='52aOptions' class='custom-control-input' action='')
+                label(class='custom-control-label' for='input1-selection-general') General
+        
+        div(class='card')
+          div(class='card-header')
+            h6 Input 2
+          div(class='card-body')
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged')
+                input(type='radio' id='input2-selection-abc' name='52bOptions' class='custom-control-input' checked action='')
+                label(class='custom-control-label' for='input2-selection-abc') 52b Phases ABC
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged with Lockout')
+                input(type='radio' id='input2-selection.Lockout' name='52bOptions' class='custom-control-input' action='')
+                label(class='custom-control-label' for='input2-selection.Lockout') 52b/69 Lockout ABC
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Individual Phase')
+                input(type='radio' id='input2-selection-a' name='52bOptions' class='custom-control-input' action='')
+                label(class='custom-control-label' for='input2-selection-a') 52b Phase A
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='52b is not used')
+                input(type='radio' id='input2-selection-general' name='52bOptions' class='custom-control-input' action='')
+                label(class='custom-control-label' for='input2-selection-general') General
+        include start-position-v2.pug

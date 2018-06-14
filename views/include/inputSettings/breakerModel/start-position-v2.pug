@@ -1,0 +1,15 @@
+//- extends layout
+
+//- block content
+block start-position
+
+  div(class='card')
+    div(class='card-header') 
+      h6 Start Position
+    div(class='card-body')
+      div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Set recloser Close')
+        input(type='radio' id='startPosition.Close' name='startPositionOptions' class='custom-control-input' checked action='')
+        label(class='custom-control-label' for='startPosition.Close') Close
+      div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Set recloser Trip')
+        input(type='radio' id='startPosition.Trip' name='startPositionOptions' class='custom-control-input' action='')
+        label(class='custom-control-label' for='startPosition.Trip') Trip

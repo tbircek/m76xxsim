@@ -1,0 +1,28 @@
+
+block output-model
+
+    div(class='card')
+      div(class='card-header')
+        h6 Output Model
+      div(class='card-body')
+        div(class='card')
+          div(class='card-header')
+            h6 Output 1
+          div(class='card-body')
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged')
+              input(type='radio' id='tripOptions-abc' name='tripOptions' class='custom-control-input' checked action='')
+              label(class='custom-control-label' for='tripOptions-abc') Trip ABC
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Independent Phase')
+              input(type='radio' id='tripOptions-a' name='tripOptions' class='custom-control-input' action='')
+              label(class='custom-control-label' for='tripOptions-a') Trip A
+              
+        div(class='card')
+          div(class='card-header')
+            h6 Output 2
+          div(class='card-body')
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged')
+              input(type='radio' id='closeOptions-abc' name='closeOptions' class='custom-control-input' checked action='')
+              label(class='custom-control-label' for='closeOptions-abc') Close ABC
+            div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Independent Phase')
+              input(type='radio' id='closeOptions-a' name='closeOptions' class='custom-control-input' action='')
+              label(class='custom-control-label' for='closeOptions-a') Close A
