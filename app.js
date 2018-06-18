@@ -13,28 +13,28 @@ var settingsRouter = require('./routes/settings');
 
 var app = express();
 
-// provide access to database.
-const options = {
-  autoIndex: false, // Don't build indexes
-  reconnectTries: 100, // Never stop trying to reconnect
-  reconnectInterval: 500, // Reconnect every 500ms
-  poolSize: 10, // Maintain up to 10 socket connections
-  // If not connected, return errors immediately rather than waiting for reconnect
-  bufferMaxEntries: 0
-};
-var mongoose = require('mongoose');
-// var mongoDB = 'mongodb://localhost/m76xxsim';
-// mongoose.connect('mongodb://localhost/m76xxsim_strings', options);
-mongoose.connect('mongodb://localhost/local', options);
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', function() {
-  console.error.bind(console, 'connection error.');
-  mongoose.connection.close();
-});
-db.once('open', function () {
-  console.log('connected to ' + mongoose.version);
-});
+// // provide access to database.
+// const options = {
+//   autoIndex: false, // Don't build indexes
+//   reconnectTries: 100, // Never stop trying to reconnect
+//   reconnectInterval: 500, // Reconnect every 500ms
+//   poolSize: 10, // Maintain up to 10 socket connections
+//   // If not connected, return errors immediately rather than waiting for reconnect
+//   bufferMaxEntries: 0
+// };
+// var mongoose = require('mongoose');
+// // var mongoDB = 'mongodb://localhost/m76xxsim';
+// // mongoose.connect('mongodb://localhost/m76xxsim_strings', options);
+// mongoose.connect('mongodb://localhost/local', options);
+// mongoose.Promise = global.Promise;
+// var db = mongoose.connection;
+// db.on('error', function() {
+//   console.error.bind(console, 'connection error.');
+//   mongoose.connection.close();
+// });
+// db.once('open', function () {
+//   console.log('connected to ' + mongoose.version);
+// });
 // db.collection('m76xsimm').insertMany([  
 //   { name: "title", value: "Recloser Simulator" },
 //   { name: "version", value: "2018.6.11" },

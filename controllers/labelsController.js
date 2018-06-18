@@ -10,15 +10,15 @@ var Resources = require('../models/labelsModel');
 // INDEX page.
 exports.index = function (req, res, next) {
 	
-	Resources.find(function (err, resources) {
-		if (err) {return next(err);}
-	 //	debug('requested data: ' + resources);
+	// Resources.find(function (err, resources) {
+	// 	if (err) {return next(err);}
+	//  //	debug('requested data: ' + resources);
 		res.render('index', {
 			title: 'Recloser Simulator',
 			author: 'Turgay Bircek',
 			description: 'Recloser simulator for Beckwith Electric Protection relays.',
 			keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-			ver: 'v2018.6.6',
+			ver: 'v2018.6.14',
 			inputLabels: ['Input 1:', 'Input 2:'],
 			outputLabels: ['Output 1:', 'Output 2:'],
 			fiftyTwoAOptions: ['52a Phases ABC', '52a Phase A', 'General'],
@@ -28,7 +28,7 @@ exports.index = function (req, res, next) {
 			cbOptions: ['Close', 'Trip'],
 			defaultValues: [0, 0, 10, 10]
 		});
-	});
+	// });
 };
 
 // Display list of all Books.

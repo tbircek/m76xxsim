@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Require controller modules.
 var settings_controller;
-const staticPage = false; // true; // 
+const staticPage = true; // false; // 
 
 if (staticPage) {
   settings_controller = require('../controllers/labelsController'); // require('../controllers/resourcesController'); // 
