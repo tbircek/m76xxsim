@@ -41,12 +41,14 @@ const edge = 'rising';
 // GPIO control library.
 const Gpio = require('onoff').Gpio;
 
+// common IO attributes.
 function IOs(name, gpio, direction) {
     this.name = name;
     this.gpio = gpio;
     this.direction = direction;
 }
 
+// input attributes
 function SetupInputs(name, gpio, direction) {
     IOs.call(this, name, gpio, direction);
 

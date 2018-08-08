@@ -1,17 +1,17 @@
 var Resources = require('../models/resourcesModel');
 
 exports.index_page = function (req, res, next) {
-  Resources.
-    find({}).
-    select({ _id: 0, name: 0 }).  // 0 = filter out, 1 = filter in. --- https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/
-    // slice('value').
-    populate({
-      path:'values', 
-      select:'value'}).
-    exec().
-    then((results) => {
-      // if (err) return next(err);
-      console.log(results);
+  // Resources.
+  //   find({}).
+  //   select({ _id: 0, name: 0 }).  // 0 = filter out, 1 = filter in. --- https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/
+  //   // slice('value').
+  //   populate({
+  //     path:'values', 
+  //     select:'value'}).
+  //   exec().
+  //   then((results) => {
+  //     // if (err) return next(err);
+  //     console.log(results);
       res.render('index', {
         // data: results,
         title: 'Recloser Simulator +db', // 
@@ -28,5 +28,5 @@ exports.index_page = function (req, res, next) {
         cbOptions: ['Close', 'Trip'],
         defaultValues: [0, 0, 10, 10]
       });
-    });
+//     });
 };

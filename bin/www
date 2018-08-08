@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = '9090'; // normalizePort(process.env.PORT || '9001');
+var port = normalizePort(process.env.PORT || '8082'); // '9090'; // 
 app.set('port', port);
 
 /**
@@ -87,4 +87,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('The server running at http://localhost:' + addr.port);
 }
