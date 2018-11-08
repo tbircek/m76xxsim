@@ -1,6 +1,6 @@
 {
   "pins": {
-    "version": "2018/4/9",
+    "version": "2018/11/8",
     "description": "M76xxsim Project uses following Beaglebone black pins available through expansion headers P8 and P9.",
     "comment": "Omitted beaglebone used pins by default.",
     "header": [{
@@ -73,7 +73,7 @@
         "label": "close_pha",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 2. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 18."
       },
       {
         "pin": "p8_15",
@@ -82,7 +82,7 @@
         "label": "trip_pha",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 1. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 17."
       },
       {
         "pin": "p8_16",
@@ -91,7 +91,7 @@
         "label": "close_phb",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 6. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 16."
       },
       {
         "pin": "p8_17",
@@ -100,7 +100,7 @@
         "label": "trip_phb",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 5. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 15."
       },
       {
         "pin": "p8_18",
@@ -109,7 +109,7 @@
         "label": "close_phc",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 8. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 14."
       },
       {
         "pin": "p8_19",
@@ -118,7 +118,7 @@
         "label": "trip_phc",
         "debounceTime": "0",
         "edge": "raising",
-        "description": "Connected to the M-76xx Output 7. Input circuit and debounce time provided by B-1713 Actuator board."
+        "description": "Connected to ULN2803 #1 pin 13."
       },
       {
         "pin": "p8_26",
@@ -145,7 +145,7 @@
         "label": "phs_a_cls(sw2)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_A_CLS."
+        "description": "Connected to ULN2803 #2 pin 2."
       },
       {
         "pin": "p8_29",
@@ -154,7 +154,7 @@
         "label": "phs_b_cls(sw2)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_B_CLS."
+        "description": "Connected to ULN2803 #2 pin 4."
       },
       {
         "pin": "p8_30",
@@ -163,7 +163,7 @@
         "label": "phs_c_cls(sw2)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_C_CLS."
+        "description": "Connected to ULN2803 #2 pin 6."
       },
       {
         "pin": "p9_11",
@@ -172,7 +172,7 @@
         "label": "pha_52a",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 1 return."
+        "description": "Connected to ULN2803 #3 pin 1."
       },
       {
         "pin": "p9_12",
@@ -181,7 +181,7 @@
         "label": "phb_52a",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 6 return."
+        "description": "Connected to ULN2803 #3 pin 3."
       },
       {
         "pin": "p9_13",
@@ -190,7 +190,7 @@
         "label": "phc_52a",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 8 return."
+        "description": "Connected to ULN2803 #3 pin 5."
       },
       {
         "pin": "p9_14",
@@ -199,7 +199,7 @@
         "label": "neu_gnd_cls(sw2)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431 #2, M-6283A Single Pole Three Phase Adapter signal name PHS_C_CLS."
+        "description": "Connected to ULN2803 #2 pin 8."
       },
       {
         "pin": "p9_15",
@@ -280,7 +280,7 @@
         "label": "neu_gnd_opn(sw1)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431 #2, M-6283A Single Pole Three Phase Adapter signal name PHS_C_OPN."
+        "description": "Connected to ULN2803 #2 pin 7."
       },
       {
         "pin": "p9_26",
@@ -298,7 +298,7 @@
         "label": "pha_52b",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 2 return."
+        "description": "Connected to ULN2803 #3 pin 2."
       },
       {
         "pin": "p9_28",
@@ -307,7 +307,7 @@
         "label": "phb_52b",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 7 return."
+        "description": "Connected to ULN2803 #3 pin 4."
       },
       {
         "pin": "p9_29",
@@ -316,7 +316,7 @@
         "label": "phc_52b",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the M-76xx Input 9 return."
+        "description": "Connected to ULN2803 #3 pin 6."
       },
       {
         "pin": "p9_30",
@@ -325,7 +325,7 @@
         "label": "phs_a_opn(sw1)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_A_OPN."
+        "description": "Connected to ULN2803 #2 pin 1."
       },
       {
         "pin": "p9_31",
@@ -334,7 +334,7 @@
         "label": "phs_b_opn(sw1)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_B_OPN."
+        "description": "Connected to ULN2803 #2 pin 3."
       },
       {
         "pin": "p9_41",
@@ -343,7 +343,7 @@
         "label": "phs_c_opn(sw1)",
         "debounceTime": "0",
         "edge": "none",
-        "description": "Connected to the B-1431, M-6283A Single Pole Three Phase Adapter signal name PHS_C_OPN."
+        "description": "Connected to ULN2803 #2 pin 5."
       }
     ]
   }
