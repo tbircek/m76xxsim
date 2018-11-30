@@ -8,15 +8,16 @@ block breaker-model
             h6 Input 1
           div(class='card-body')
             div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='3ph Ganged')
-                input(type='radio' id='input1-selection-abc' name='52aOptions' class='custom-control-input' checked action='')
+                input(type='radio' class='custom-control-input'  id='input1-selection-abc' name='52aOptions' action='POST?test0' required)
                 label(class='custom-control-label' for='input1-selection-abc') 52a Phases ABC
             div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='Individual Phase')
-                input(type='radio' id='input1-selection-a' name='52aOptions' class='custom-control-input' action='')
+                input(type='radio' id='input1-selection-a' name='52aOptions' class='custom-control-input' action='POST?test1' required)
                 label(class='custom-control-label' for='input1-selection-a') 52a Phase A
             div(class='custom-control custom-radio custom-control-inline' data-toggle='tooltip' title='52a is not used')
-                input(type='radio' id='input1-selection-general' name='52aOptions' class='custom-control-input' action='')
+                input(type='radio' id='input1-selection-general' name='52aOptions' class='custom-control-input' action='POST?test2' required)
                 label(class='custom-control-label' for='input1-selection-general') General
-        
+                div(class='invalid-feedback') Select one option
+                
         div(class='card')
           div(class='card-header')
             h6 Input 2

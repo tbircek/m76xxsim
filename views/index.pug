@@ -1,12 +1,15 @@
 extends layout
-
 block content
-
   div(class='container')
-    nav(class='navbar navbar-dark shadow p-1 mb-3 rounded bg-danger')
-      h1= title
-      small #{ver}
-  div(class='container-fluid')
-    div(class='row')
-      include include/inputSettings/inputs.pug  
-      include include/outputSettings/outputs.pug
+    div(class='card')
+      h1(class='card-header text-black bg-danger') #{title}
+      small(class='card-subtitle mb-2 text-black bg-danger text-right') #{ver} 
+      form()
+        div(class='card-body')
+          include include/inputSettings/breakerModel/breaker-model-v3.pug
+          include include/outputSettings/outputModel/output-model-v2.pug
+          
+          button(class='btn btn-secondary' onclick='init')=submitButton
+          button(class='btn btn-secondary' href='#monitor' role='button' disabled)=infoButton
+          
+          include include/foot/footer.pug

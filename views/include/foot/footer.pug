@@ -1,7 +1,11 @@
+- var url = 'http://www.beckwithelectric.com/'
 block foot
-    footer(class='mastfoot mt-auto')
-        div(class='inner')
-            small
-                address
-                    <strong>Beckwith Electric Co. Inc.</strong> &copy;2018 6190 118th Ave. North Largo, FL 33773 
-                    abbr(title='Phone') Ph: (727) 544-2326
+  div(class='card-footer bg-transparent text-right text-muted')
+    div(class='inner')
+      small
+        address
+          a(href=url) <strong>Beckwith Electric Co. Inc.</strong>
+          .
+             &copy; 2018 
+          p 6190 118th Ave. North Largo, FL 33773
+            abbr(title='Phone')  Ph: (727) 544-2326
