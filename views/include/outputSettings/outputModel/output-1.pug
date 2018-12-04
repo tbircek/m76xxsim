@@ -4,10 +4,10 @@ block output1
       h6 Output 1
     div(class='card-body')
       div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
-        input(type='radio' class='custom-control-input' id='tripOptions-abc' name='tripOptions' value='3trip' checked required)
+        input(type='radio' class='custom-control-input' id='tripOptions-abc' name='tripOptions' value='3trip' checked required onclick='getOption()')
         label(class='custom-control-label' for='tripOptions-abc') Trip ABC
         
       div(class='custom-control custom-radio' data-toggle='tooltip' title='Independent Phase')
-        input(type='radio' class='custom-control-input' id='tripOptions-a' name='tripOptions' value='1trip' required)
+        input(type='radio' class='custom-control-input' id='tripOptions-a' name='tripOptions' value='1trip' required onclick='getOption()')
         label(class='custom-control-label' for='tripOptions-a') Trip A
       div(class='invalid-feedback') Select a Output option for Output 1

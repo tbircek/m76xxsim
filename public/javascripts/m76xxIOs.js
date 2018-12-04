@@ -36,7 +36,6 @@ function m76xxIOs(opts) {
 
   // Phase A Setup
   const { Phs_A_Cls, Phs_A_Opn, PhA_52a, PhA_52b, Close_PhA, Trip_PhA } = Setup_Phase_A(opts);
-  // if (opts.recloserType === 'Independent Phase Capable') {
   // Phase B
   const { Phs_B_Cls, Phs_B_Opn, PhB_52a, PhB_52b, Close_PhB, Trip_PhB } = Setup_Phase_B(opts);
   // Phase C Setup
@@ -66,12 +65,12 @@ function m76xxIOs(opts) {
   /************************************************************
    * 
    * Set default options.
-   * cbPosition = Close -> 52a is close
-   * cbPosition = Trip  -> 52a is open
+   * cbPosition = close -> 52a is close
+   * cbPosition = trip  -> 52a is open
    * 
    **************************************************************/
 
-  if (opts.cbPosition === 'Close') {
+  if (opts.cbPosition === 'close') {
     switch (opts.breakerModel) {
       case '52a only':
         Close_PhA_52a_Only();
@@ -94,7 +93,7 @@ function m76xxIOs(opts) {
         break;
     }
   }
-  else if (opts.cbPosition === 'Trip') {
+  else if (opts.cbPosition === 'trip') {
     switch (opts.breakerModel) {
       case '52a only':
         Trip_PhA_52a_Only();
@@ -118,6 +117,7 @@ function m76xxIOs(opts) {
     }
   }
   else {
+  	console.log('cbPosition: ' + opts.cbPosition);
     console.log('invalid cbPosition.');
   }
 

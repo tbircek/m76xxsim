@@ -4,9 +4,9 @@ block start-position
       h6 Start Position
     div(class='card-body')
       div(class='custom-control custom-radio' data-toggle='tooltip' title='Set recloser Close')
-        input(type='radio' id='startPositionClose' name='startPositionOptions' class='custom-control-input' value='close' required checked)
+        input(type='radio' id='startPositionClose' name='startPositions' class='custom-control-input' value='close' required checked onclick='getOption(name, value)')
         label(class='custom-control-label' for='startPositionClose') Close
       div(class='custom-control custom-radio' data-toggle='tooltip' title='Set recloser Trip')
-        input(type='radio' id='startPositionTrip' name='startPositionOptions' class='custom-control-input' value='trip' required)
+        input(type='radio' id='startPositionTrip' name='startPositions' class='custom-control-input' value='trip' required onclick='getOption(name, value)')
         label(class='custom-control-label' for='startPositionTrip') Trip
       div(class='invalid-feedback') Select a Start Position

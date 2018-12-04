@@ -4,10 +4,10 @@ block output2
       h6 Output 2
     div(class='card-body')
       div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
-        input(type='radio' class='custom-control-input' id='closeOptions-abc' name='closeOptions' value='3close' required checked)
+        input(type='radio' class='custom-control-input' id='closeOptions-abc' name='closeOptions' value='3close' required checked onclick='getOption()')
         label(class='custom-control-label' for='closeOptions-abc') Close ABC
         
       div(class='custom-control custom-radio' data-toggle='tooltip' title='Independent Phase')
-        input(type='radio' class='custom-control-input' id='closeOptions-a' name='closeOptions' value='1close' required)
+        input(type='radio' class='custom-control-input' id='closeOptions-a' name='closeOptions' value='1close' required onclick='getOption()')
         label(class='custom-control-label' for='closeOptions-a') Close A
       div(class='invalid-feedback') Select a Output option for Output 2

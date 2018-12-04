@@ -40,8 +40,10 @@
 // interface to inputs/oututs of beaglebone black.
 const beagle = require('./m76xx-io-setup');
 
+var IOControl = require('./m76xxIOs').m76xxIOs;
+
 // interface to the modbus communication library.
-const mdbus = require('./modbus-comm');
+// const mdbus = require('./modbus-comm');
 
 // interface to lcd.
 // const lcd = require('./lcd');
@@ -51,7 +53,7 @@ const mdbus = require('./modbus-comm');
 function init() {
 
   // connect modbus for future use?
-  mdbus.connect;
+  // mdbus.connect;
 
   // activeLibrary;
   library1();
@@ -64,13 +66,13 @@ function init() {
   // if no file exists create a new one.
 }
 
-const beagle3_3V = 3.3;               // 3.3V power supply
-const VIH = 2.0;                      // High-level input voltage per datasheet
-const VHYS = 0.44 ;                   // max Hysteresis voltage at an input per datasheet
-const logicHighVoltage = VIH + VHYS;  // calculated High-level input voltage
-const resistorSize = 2.4e3 * 1.05;    // 2.4Kohm
-const capSize = 4.7e-6 * 1.2;         // 4.7uF cap
-const secTomsecRate = 1e3;            // 1 sec = 1000msec
+const beagle3_3V = 3.3; // 3.3V power supply
+const VIH = 2.0; // High-level input voltage per datasheet
+const VHYS = 0.44; // max Hysteresis voltage at an input per datasheet
+const logicHighVoltage = VIH + VHYS; // calculated High-level input voltage
+const resistorSize = 2.4e3 * 1.05; // 2.4Kohm
+const capSize = 4.7e-6 * 1.2; // 4.7uF cap
+const secTomsecRate = 1e3; // 1 sec = 1000msec
 const logicHighRatio = (beagle3_3V - logicHighVoltage) / beagle3_3V;
 
 function IOInit() {
@@ -90,17 +92,17 @@ function IOInit() {
     closeTime52bDelay: 0 // 
   };
   beagle.UserInputs.call(this, userValues);
-    // userValues.breakerModel, 
-    // userValues.cbPosition,
-    // userValues.edge,
-    // userValues.recloserType,
-    // userValues.operationMode,
-    // userValues.closeDebounceTime,
-    // userValues.tripDebounceTime,
-    // userValues.tripTime52aDelay,
-    // userValues.tripTime52bDelay,
-    // userValues.closeTime52aDelay,
-    // userValues.closeTime52bDelay);
+  // userValues.breakerModel, 
+  // userValues.cbPosition,
+  // userValues.edge,
+  // userValues.recloserType,
+  // userValues.operationMode,
+  // userValues.closeDebounceTime,
+  // userValues.tripDebounceTime,
+  // userValues.tripTime52aDelay,
+  // userValues.tripTime52bDelay,
+  // userValues.closeTime52aDelay,
+  // userValues.closeTime52bDelay);
 
   // Phase A items.
   const PhA_52a = new beagle.Outputs('PhA_52a', 30, 'out');
@@ -163,20 +165,44 @@ function IOInit() {
 function library1() { // first library.
 
   console.log('Library 1 init.');
-  var IOControl = require('./m76xxIOs').m76xxIOs,
-    ioControl = new IOControl({
-      breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-      cbPosition: 'Close', // 'Trip', // 
-      edge: 'both', // 'none', // 'rising', // 'falling', // 
-      recloserType: 'Independent Phase Capable', // '3ph Ganged', // 
-      operationMode: '1Trip 1Close', // '3Trip 3Close', // '1Trip 3Close', //
-      debounceTime: (-Math.log(logicHighRatio) * ( resistorSize * capSize * secTomsecRate )).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
-      operationDelayTime52a: 50, // due to javascript constraints
-      operationDelayTime52b: 75 // , // due to javascript constraints
-      // operationDurationTime52a: 50,
-      // operationDurationTime52b: 50
-    });
-    
+  // var ioControl = new IOControl({
+  IOControl({
+    breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
+    cbPosition: 'close', // 'trip', // 
+    edge: 'both', // 'none', // 'rising', // 'falling', // 
+    // recloserType: 'independent', // 'ganged', // 
+    operationMode: '1trip 1close', // '3trip 3close', // '1trip 3close', //
+    debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+    operationDelayTime52a: 50, // due to javascript constraints
+    operationDelayTime52b: 75 // , // due to javascript constraints
+    // operationDurationTime52a: 50,
+    // operationDurationTime52b: 50
+  });
+
+}
+
+function library1WithValues(opts) {
+  
+  console.log('library1WithValues active');
+  console.log('breakerModel: ' + opts.breakerModel);
+  console.log('startPosition: ' + opts.cbPosition);
+  console.log('operationMode: ' + opts.operationMode);
+  console.log('operationDelayTime52a: ' + opts.aOperationDelay);
+  console.log('operationDelayTime52b: ' + opts.bOperationDelay);
+
+  // var ioControl = new IOControl({
+  new IOControl({
+    breakerModel: opts.breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
+    cbPosition: opts.cbPosition, // 'close', // 'trip', // 
+    edge: 'both', // 'none', // 'rising', // 'falling', // 
+    // recloserType: 'independent', // 'ganged', // 
+    operationMode: opts.operationMode, // '1trip 1close', // '3trip 3close', // '1trip 3close', //
+    debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+    operationDelayTime52a: opts.aOperationDelay, // 50,
+    operationDelayTime52b: opts.bOperationDelay // 75
+    // operationDurationTime52a: 50,
+    // operationDurationTime52b: 50
+  });
 }
 
 // If ctrl+c is hit, free resources and exit.
@@ -190,4 +216,9 @@ process.on('uncaughtException', function(err) {
 });
 
 // entry point.
-init();
+// module.exports = init();
+module.exports = {
+  init: init(),
+  initWithValues: library1WithValues
+  // lib1: library1(breakerModel)
+};
