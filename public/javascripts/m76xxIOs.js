@@ -59,7 +59,7 @@ function m76xxIOs(opts) {
     var totalTripTime = 0;
     console.log('m76xxIOs:\n\tPhase IOs activated...');
     console.log('\t52a Delay:\t%dms\t52b Delay:\t%dms', opts.operationDelayTime52a, opts.operationDelayTime52b);
-    console.log('\t52 Duration:\t%dms\t52b Duration:\t%dms', opts.operationDurationTime52a, opts.operationDurationTime52b);
+    // console.log('\t52 Duration:\t%dms\t52b Duration:\t%dms', opts.operationDelayTime52a, opts.operationDelayTime52b);
   }
 
   /************************************************************
@@ -69,15 +69,18 @@ function m76xxIOs(opts) {
    * cbPosition = trip  -> 52a is open
    * 
    **************************************************************/
-
-  if (opts.cbPosition === 'close') {
+	
+	// Operate 52a and/or 52b immediately.
+  if (opts.startPosition === 'close') {
     switch (opts.breakerModel) {
       case '52a only':
+      case '52a only, 52b':
         Close_PhA_52a_Only();
         Close_PhB_52a_Only();
         Close_PhC_52a_Only();
         break;
       case '52b only':
+      case '52a, 52b only':
         Close_PhA_52b_Only();
         Close_PhB_52b_Only();
         Close_PhC_52b_Only();
@@ -93,14 +96,16 @@ function m76xxIOs(opts) {
         break;
     }
   }
-  else if (opts.cbPosition === 'trip') {
+  else if (opts.startPosition === 'trip') {
     switch (opts.breakerModel) {
       case '52a only':
+      case '52a only, 52b':
         Trip_PhA_52a_Only();
         Trip_PhB_52a_Only();
         Trip_PhC_52a_Only();
         break;
       case '52b only':
+      case '52a, 52b only':
         Trip_PhA_52b_Only();
         Trip_PhB_52b_Only();
         Trip_PhC_52b_Only();
@@ -117,8 +122,8 @@ function m76xxIOs(opts) {
     }
   }
   else {
-  	console.log('cbPosition: ' + opts.cbPosition);
-    console.log('invalid cbPosition.');
+  	console.log('startPosition: ' + opts.startPosition);
+    console.log('invalid startPosition.');
   }
 
   // Ph A operations.
@@ -129,10 +134,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Close_PhA_52a_Only();
+      case '52a only, 52b':
+        setTimeout(Close_PhA_52a_Only, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Close_PhA_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(Close_PhA_52b_Only, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -151,10 +158,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Trip_PhA_52a_Only();
+      case '52a only, 52b':
+        setTimeout(Trip_PhA_52a_Only, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Trip_PhA_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(Trip_PhA_52b_Only, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -174,10 +183,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Close_PhB_52a_Only();
+      case '52a only, 52b':
+        setTimeout(function() {Close_PhB_52a_Only}, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Close_PhB_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(function() {Close_PhB_52b_Only}, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -196,10 +207,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Trip_PhB_52a_Only();
+      case '52a only, 52b':
+        setTimeout(function() {Trip_PhB_52a_Only}, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Trip_PhB_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(function() {Trip_PhB_52b_Only}, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -219,10 +232,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Close_PhC_52a_Only();
+      case '52a only, 52b':
+        setTimeout(function() {Close_PhC_52a_Only}, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Close_PhC_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(function() {Close_PhC_52b_Only}, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -241,10 +256,12 @@ function m76xxIOs(opts) {
 
     switch (opts.breakerModel) {
       case '52a only':
-        Trip_PhC_52a_Only();
+      case '52a only, 52b':
+        setTimeout(function() {Trip_PhC_52a_Only}, opts.operationDelayTime52a);
         break;
       case '52b only':
-        Trip_PhC_52b_Only();
+    	case '52a, 52b only':
+        setTimeout(function() {Trip_PhC_52b_Only}, opts.operationDelayTime52b);
         break;
       case '52a, 52b':
       case '52a, 52b/69':
@@ -260,66 +277,66 @@ function m76xxIOs(opts) {
   // 52a only
   function Trip_PhA_52a_Only() {
     // Wait out for 52a delay time. 
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_A_Cls.writeSync(Logic0);
       Phs_A_Opn.writeSync(Logic1);
       PhA_52a.writeSync(Logic0);
-    }, opts.operationDurationTime52a);
+    // }, opts.operationDelayTime52a);
   }
 
   // Handles Trip operation of Phase B.
   // 52a only
   function Trip_PhB_52a_Only() {
     // Wait out for 52a delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_B_Cls.writeSync(Logic0);
       Phs_B_Opn.writeSync(Logic1);
       PhB_52a.writeSync(Logic0);
-    }, opts.operationDurationTime52a);
+    // }, opts.operationDelayTime52a);
   }
 
   // Handles Trip operation of Phase B.
   // 52a only
   function Trip_PhC_52a_Only() {
     // Wait out for 52a delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_C_Cls.writeSync(Logic0);
       Phs_C_Opn.writeSync(Logic1);
       PhC_52a.writeSync(Logic0);
-    }, opts.operationDurationTime52a);
+    // }, opts.operationDelayTime52a);
   }
 
   // Handles Trip operation of Phase A.
   // 52b only
   function Trip_PhA_52b_Only() {
     // Wait out for 52b delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_A_Cls.writeSync(Logic0);
       Phs_A_Opn.writeSync(Logic1);
       PhA_52b.writeSync(Logic1);
-    }, opts.operationDurationTime52b);
+    // }, opts.operationDelayTime52b);
   }
 
   // Handles Trip operation of Phase B.
   // 52b only
   function Trip_PhB_52b_Only() {
     // Wait out for 52b delay time. 
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_B_Cls.writeSync(Logic0);
       Phs_B_Opn.writeSync(Logic1);
       PhB_52b.writeSync(Logic1);
-    }, opts.operationDurationTime52b);
+    // }, opts.operationDelayTime52b);
   }
 
   // Handles Trip operation of Phase C.
   // 52b only
   function Trip_PhC_52b_Only() {
     // Wait out for 52b delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_C_Cls.writeSync(Logic0);
       Phs_C_Opn.writeSync(Logic1);
       PhC_52b.writeSync(Logic1);
-    }, opts.operationDurationTime52b);
+    // }, opts.operationDelayTime52b);
   }
 
   // Handles Trip operation of Phase A.
@@ -352,7 +369,7 @@ function m76xxIOs(opts) {
     // // Wait out for 52b duration time. 
     // setTimeout(function() {
 
-    // }, opts.operationDurationTime52b);
+    // }, opts.operationDelayTime52b);
 
     if (debug) {
       phATripCounter++;
@@ -440,64 +457,68 @@ function m76xxIOs(opts) {
   // 52a only
   function Close_PhA_52a_Only() {
     // Wait out for 52a delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_A_Cls.writeSync(Logic1);
       Phs_A_Opn.writeSync(Logic0);
+      Neu_Gnd_Cls.writeSync(Logic1);
+      Neu_Gnd_Opn.writeSync(Logic0);
+      
       PhA_52a.writeSync(Logic1);
-    }, opts.closeTime52aDelay);
+    // }, opts.closeTime52aDelay);
   }
 
   // Handles Close operation of Phase B.
   // 52a only
   function Close_PhB_52a_Only() {
     // Wait out for 52a delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_B_Cls.writeSync(Logic0);
       Phs_B_Opn.writeSync(Logic1);
+      
       PhB_52a.writeSync(Logic1);
-    }, opts.closeTime52aDelay);
+    // }, opts.closeTime52aDelay);
   }
 
   // Handles Close operation of Phase C.
   // 52a only
   function Close_PhC_52a_Only() {
     // Wait out for 52a delay time. 
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_C_Cls.writeSync(Logic1);
       Phs_C_Opn.writeSync(Logic0);
       PhC_52a.writeSync(Logic1);
-    }, opts.closeTime52aDelay);
+    // }, opts.closeTime52aDelay);
   }
 
   // Handles Close operation of Phase A.
   // 52b only
   function Close_PhA_52b_Only() {
     // Wait out for 52b delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_A_Cls.writeSync(Logic1);
       Phs_A_Opn.writeSync(Logic0);
       PhA_52b.writeSync(Logic0);
-    }, opts.closeTime52bDelay);
+    // }, opts.closeTime52bDelay);
   }
 
   // Handles Close operation of Phase B.
   // 52b only
   function Close_PhB_52b_Only() {
     // Wait out for 52b delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_B_Cls.writeSync(Logic1);
       Phs_B_Opn.writeSync(Logic0);
       PhB_52b.writeSync(Logic0);
-    }, opts.closeTime52bDelay);
+    // }, opts.closeTime52bDelay);
   }
 
   function Close_PhC_52b_Only() {
     // Wait out for 52b delay time.
-    setTimeout(function() {
+    // setTimeout(function() {
       Phs_C_Cls.writeSync(Logic1);
       Phs_C_Opn.writeSync(Logic0);
       PhC_52b.writeSync(Logic0);
-    }, opts.closeTime52bDelay);
+    // }, opts.closeTime52bDelay);
   }
 
   // Handles Close operation of Phase A.
@@ -534,7 +555,7 @@ function m76xxIOs(opts) {
     // // Wait out for 52a delay time.
     // setTimeout(function() {
 
-    // }, opts.operationDurationTime52a);
+    // }, opts.operationDelayTime52a);
 
     if (debug) {
       phACloseCounter++;

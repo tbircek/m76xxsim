@@ -1,48 +1,90 @@
 block scripts
-  script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous")
-  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous")
-  
-  script.
-    function getOption(){
-      
-      var breakerModel = document.querySelector('input[name= "bOptions"').value + ', ' + document.querySelector('input[name= "aOptions"').value;
-      
-      var operationMode = document.querySelector('input[name= "tripOptions"').value + ' ' + document.querySelector('input[name= "closeOptions"').value;
-      
-      var aOperationDelay = document.querySelector('input[name= "aOperationDelay"').value;
-      var bOperationDelay = document.querySelector('input[name= "bOperationDelay"').value;
-      
-      var startPosition = document.querySelector('input[name= "startPositions"').value;
-      
-      // var formData = new FormData(document.querySelector('#m76xxsimForm'));
-      
-      // formData.set('breakerModel', breakerModel);
-      // formData.set('operationMode', operationMode);
-      // formData.set('aOperationDelay', aOperationDelay);
-      // formData.set('bOperationDelay', bOperationDelay);
+
+	script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous')
 	
-      console.log('script');
-      console.log('breakerModel: ' + breakerModel);
-      console.log('startPosition: ' + startPosition);
-      console.log('operationMode: ' + operationMode);
-      console.log('aOperationDelay: ' + aOperationDelay);
-      console.log('bOperationDelay: ' + bOperationDelay);
-      
-      var myHeaders = new Headers();
-      var myInit = {
-        method: 'PUT',
-        headers: myHeaders,
-        mode: 'cors',
-        cache: 'default'
-      };
-      
-      var message = 'breakerModel=' + breakerModel + '&startPosition=' + startPosition + '&operationMode='+ operationMode + '&aOperationDelay=' + aOperationDelay + '&bOperationDelay=' + bOperationDelay;
-      
-      // var myRequest = new Request('?' + name + '=' + value, myInit);
-      var myRequest = new Request('?' + message, myInit);
-      
-      fetch(myRequest);
-      
-    }
-      
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49' crossorigin='anonymous')
+	
+	script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy' crossorigin='anonymous')
+	
+	script.
+		function getOption() {
+	
+			var bOptions = document.querySelector('input[name="bOptions"]:checked').value; 
+			var aOptions =document.querySelector('input[name="aOptions"]:checked').value;
+			// var breakerModel = document.querySelector('input[name="bOptions"]:checked').value + ', ' + document.querySelector('input[name="aOptions"]:checked').value;
+			var breakerModel = bOptions + ', ' + aOptions;
+			var startPosition = document.querySelector('input[name="startPositions"]:checked').value;
+		
+			var operationMode = document.querySelector('input[name="tripOptions"]:checked').value + ' ' + document.querySelector('input[name="closeOptions"]:checked').value;
+		
+			var aOperationDelay = document.querySelector('input[name="aOperationDelay"]').value;
+			var bOperationDelay = document.querySelector('input[name="bOperationDelay"]').value;
+		
+			// var settings_controller = require('../controllers/labelsController');
+			
+		
+			// formData.set('title', 'Recloser Simulator');
+			// formData.set('author', 'T. Bircek');
+			// formData.set('description', 'Recloser simulator for Protection relays.');
+			// keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
+			// ver: 'v2018.12.05',
+			// inputLabels: ['Input 1:', 'Input 2:'],
+			// input1Checked: [true, false, false],
+			// input2Checked: [true, false, false, false],
+			// outputLabels: ['Output 1:', 'Output 2:'],
+			// output1Checked: [true, false],
+			// output2Checked: [true, false],
+			// aOptions: ['52a Phases ABC', '52a Phase A', 'General'],
+			// bOptions: ['52b Phases ABC', '52b/69 Lockout ABC', '52b Phase A', 'General'],
+			// tripOptions: ['Trip ABC', 'Trip A'],
+			// closeOptions: ['Close ABC', 'Close A'],
+			// startPosition: ['Close', 'Trip'],
+			// submitButton: 'Update',
+			// infoButton: 'Monitor',
+			// defaultValues: [50, 75]
+		
+			// formData.set('breakerModel', breakerModel);
+			// formData.set('operationMode', operationMode);
+			// formData.set('aOperationDelay', aOperationDelay);
+			// formData.set('bOperationDelay', bOperationDelay);
+		
+			console.log('script');
+			console.log('breakerModel: ' + breakerModel);
+			console.log('startPosition: ' + startPosition);
+			console.log('operationMode: ' + operationMode);
+			console.log('aOperationDelay: ' + aOperationDelay);
+			console.log('bOperationDelay: ' + bOperationDelay);
+		
+			var myHeaders = new Headers();
+			var myInit = {
+				method: 'PUT',
+				headers: myHeaders,
+				mode: 'cors',
+				cache: 'default'
+			};
+		
+			var message = '?breakerModel=' + breakerModel + '&startPosition=' + startPosition + '&operationMode=' + operationMode + '&aOperationDelay=' + aOperationDelay + '&bOperationDelay=' + bOperationDelay;
+		
+			// var myRequest = new Request('?' + name + '=' + value, myInit);
+			var myRequest = new Request(message, myInit);
+		
+			// fetch(myRequest);
+			fetch(myRequest)
+		// 		.then(function(response) {
+		// 			return settings_controller.settings_update_put(req, res);
+		// 		})
+		// 		.then(function(myJson) {
+		// 			console.log(JSON.stringify(myJson));
+		// 		});
+		// }
+			// script(src='../public/javascripts/main.js')
+			
+			// script.
+			// 	document.addEventListener('DOMContentLoaded', function(event) {
+			// 		console.log('DOM fully loaded and parsed');
+				
+			
+			
+				// }));
+				
+			}

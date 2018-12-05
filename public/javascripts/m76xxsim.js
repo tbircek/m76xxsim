@@ -42,6 +42,9 @@ const beagle = require('./m76xx-io-setup');
 
 var IOControl = require('./m76xxIOs').m76xxIOs;
 
+// // Holds all input values and initialize default values.
+// var formData = new FormData();
+
 // interface to the modbus communication library.
 // const mdbus = require('./modbus-comm');
 
@@ -54,7 +57,12 @@ function init() {
 
   // connect modbus for future use?
   // mdbus.connect;
-
+	
+	// formData.set('breakerModel', breakerModel);
+ // formData.set('operationMode', operationMode);
+ // formData.set('aOperationDelay', aOperationDelay);
+ // formData.set('bOperationDelay', bOperationDelay);
+  
   // activeLibrary;
   library1();
   // IOInit();
@@ -80,7 +88,7 @@ function IOInit() {
   // attach these values to user interface in web server.
   var userValues = {
     breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-    cbPosition: 'Close', // 'Trip', // 
+    startPosition: 'Close', // 'Trip', // 
     edge: 'both', // 'none', // 'rising', // 'falling', // 
     recloserType: 'Independent Phase Capable', // '3ph Ganged', // 
     operationMode: '1Trip 1Close', // '3Trip 3Close', // '1Trip 3Close', // 
@@ -168,7 +176,7 @@ function library1() { // first library.
   // var ioControl = new IOControl({
   IOControl({
     breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-    cbPosition: 'close', // 'trip', // 
+    startPosition: 'close', // 'trip', // 
     edge: 'both', // 'none', // 'rising', // 'falling', // 
     // recloserType: 'independent', // 'ganged', // 
     operationMode: '1trip 1close', // '3trip 3close', // '1trip 3close', //
@@ -185,7 +193,7 @@ function library1WithValues(opts) {
   
   console.log('library1WithValues active');
   console.log('breakerModel: ' + opts.breakerModel);
-  console.log('startPosition: ' + opts.cbPosition);
+  console.log('startPosition: ' + opts.startPosition);
   console.log('operationMode: ' + opts.operationMode);
   console.log('operationDelayTime52a: ' + opts.aOperationDelay);
   console.log('operationDelayTime52b: ' + opts.bOperationDelay);
@@ -193,7 +201,7 @@ function library1WithValues(opts) {
   // var ioControl = new IOControl({
   new IOControl({
     breakerModel: opts.breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-    cbPosition: opts.cbPosition, // 'close', // 'trip', // 
+    startPosition: opts.startPosition, // 'close', // 'trip', // 
     edge: 'both', // 'none', // 'rising', // 'falling', // 
     // recloserType: 'independent', // 'ganged', // 
     operationMode: opts.operationMode, // '1trip 1close', // '3trip 3close', // '1trip 3close', //
