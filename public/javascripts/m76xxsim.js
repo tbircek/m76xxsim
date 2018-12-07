@@ -62,78 +62,51 @@ const secTomsecRate = 1e3; // 1 sec = 1000msec
 const logicHighRatio = (beagle3_3V - logicHighVoltage) / beagle3_3V;
 const debounceTime = (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2);
 
-function init(breakerModel = '52a, 52b', startPosition = 'close', operationMode ='3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
+function init(breakerModel = '52a, 52b', startPosition = 'close', operationMode = '3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
 
-	// connect modbus for future use?
-	// mdbus.connect;
-
-	// formData.set('breakerModel', breakerModel);
-	// formData.set('operationMode', operationMode);
-	// formData.set('aOperationDelay', aOperationDelay);
-	// formData.set('bOperationDelay', bOperationDelay);
-
-	console.log('new init() active');
-	console.log('breakerModel: ' + breakerModel);
-	console.log('startPosition: ' + startPosition);
-	console.log('operationMode: ' + operationMode);
-	console.log('operationDelayTime52a: ' + aOperationDelay);
-	console.log('operationDelayTime52b: ' + bOperationDelay);
+	if (process.env.NODE_ENV === 'development') {
+		console.log('new init() active');
+		console.log('breakerModel: ' + breakerModel);
+		console.log('startPosition: ' + startPosition);
+		console.log('operationMode: ' + operationMode);
+		console.log('operationDelayTime52a: ' + aOperationDelay);
+		console.log('operationDelayTime52b: ' + bOperationDelay);
+	}
 
 	// activeLibrary;
 	// library1();
 	// IOInit();
-	IOControl({
+	new IOControl({
 		breakerModel: breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
 		startPosition: startPosition, // 'close', // 'trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', // 
-		// recloserType: 'independent', // 'ganged', // 
+		edge: 'both', // 'none', // 'rising', // 'falling', //
 		operationMode: operationMode, //'3trip 3close', // '1trip 1close', // '1trip 3close', //
-		debounceTime: debounceTime, // (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+		debounceTime: debounceTime,
 		aOperationDelay: aOperationDelay, // 60,
 		bOperationDelay: bOperationDelay //60
 	});
-	
-	// library1WithValues(defaultOpts);
-	
+
 	// initialization completed.
 	console.log('m76xxsim init completed...');
-
-	// load status of all ports from previously saved file 
-	// if no file exists create a new one.
 }
 
 
-function IOInit() {
+function IOInit(breakerModel = '52a, 52b', startPosition = 'close', operationMode = '3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
 
 	// attach these values to user interface in web server.
 	var userValues = {
-		breakerModel: '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-		startPosition: 'Close', // 'Trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', // 
-		recloserType: 'Independent Phase Capable', // '3ph Ganged', // 
-		operationMode: '1Trip 1Close', // '3Trip 3Close', // '1Trip 3Close', // 
-		// closeDebounceTime: 10, // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
-		// tripDebounceTime: 10, // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds. 
-		tripTime52aDelay: 0, // 
-		tripTime52bDelay: 0, // 
-		closeTime52aDelay: 0, // 
-		closeTime52bDelay: 0 // 
+		breakerModel: breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
+		startPosition: startPosition, // 'close', // 'trip', // 
+		edge: 'both', // 'none', // 'rising', // 'falling', //
+		operationMode: operationMode, //'3trip 3close', // '1trip 1close', // '1trip 3close', //
+		debounceTime: debounceTime,
+		aOperationDelay: aOperationDelay, // 60,
+		bOperationDelay: bOperationDelay //60
 	};
-	beagle.UserInputs(userValues);
-	// userValues.breakerModel, 
-	// userValues.cbPosition,
-	// userValues.edge,
-	// userValues.recloserType,
-	// userValues.operationMode,
-	// userValues.closeDebounceTime,
-	// userValues.tripDebounceTime,
-	// userValues.tripTime52aDelay,
-	// userValues.tripTime52bDelay,
-	// userValues.closeTime52aDelay,
-	// userValues.closeTime52bDelay);
-
+	new beagle.UserInputs(userValues);
+	
 	// Phase A items.
-	const PhA_52a = new beagle.Outputs('PhA_52a', 30, 'out');
+	var PhA_52a = new beagle.Outputs('PhA_52a', 30, 'out');
 	const PhA_52b = new beagle.Outputs('PhA_52b', 115, 'out');
 	const Phs_A_Cls = new beagle.Outputs('Phs_A_Cls', 88, 'out');
 	const Phs_A_Opn = new beagle.Outputs('Phs_A_Opn', 112, 'out');
@@ -176,6 +149,10 @@ function IOInit() {
 		Close_PhC.name, Close_PhC.gpio, Close_PhC.direction, Close_PhC.edge, Close_PhC.debounceTimeout);
 	console.log('name: %s\t\tgpio: %s\tdirection: %s\tedge: %s\tdebounce: %dms',
 		Trip_PhC.name, Trip_PhC.gpio, Trip_PhC.direction, Trip_PhC.edge, Trip_PhC.debounceTimeout);
+
+	PhA_52a.close();
+	PhB_52a.close();
+	PhC_52a.close();
 }
 
 // function library2() {
@@ -190,47 +167,47 @@ function IOInit() {
 //   m76xxIOs.setCBPositions();
 // }
 
-function library1() { // first library.
+// function library1() { 
 
-	console.log('Library 1 init.');
-	// var ioControl = new IOControl({
-	IOControl({
-		breakerModel: '52a only', // '52b only', // '52a, 52b/69', //'52a, 52b', //
-		startPosition: 'close', // 'trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', // 
-		// recloserType: 'independent', // 'ganged', // 
-		operationMode: '1trip 1close', // '3trip 3close', // '1trip 3close', //
-		debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
-		operationDelayTime52a: 50, // due to javascript constraints
-		operationDelayTime52b: 75 // , // due to javascript constraints
-		// operationDurationTime52a: 50,
-		// operationDurationTime52b: 50
-	});
-}
+// 	console.log('Library 1 init.');
+// 	// var ioControl = new IOControl({
+// 	IOControl({
+// 		breakerModel: '52a only', // '52b only', // '52a, 52b/69', //'52a, 52b', //
+// 		startPosition: 'close', // 'trip', // 
+// 		edge: 'both', // 'none', // 'rising', // 'falling', // 
+// 		// recloserType: 'independent', // 'ganged', // 
+// 		operationMode: '1trip 1close', // '3trip 3close', // '1trip 3close', //
+// 		debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+// 		operationDelayTime52a: 50, // due to javascript constraints
+// 		operationDelayTime52b: 75 // , // due to javascript constraints
+// 		// operationDurationTime52a: 50,
+// 		// operationDurationTime52b: 50
+// 	});
+// }
 
-function library1WithValues(opts) {
+// function library1WithValues(opts) {
 
-	console.log('library1WithValues active');
-	console.log('breakerModel: ' + opts.breakerModel);
-	console.log('startPosition: ' + opts.startPosition);
-	console.log('operationMode: ' + opts.operationMode);
-	console.log('operationDelayTime52a: ' + opts.aOperationDelay);
-	console.log('operationDelayTime52b: ' + opts.bOperationDelay);
+// 	console.log('library1WithValues active');
+// 	console.log('breakerModel: ' + opts.breakerModel);
+// 	console.log('startPosition: ' + opts.startPosition);
+// 	console.log('operationMode: ' + opts.operationMode);
+// 	console.log('operationDelayTime52a: ' + opts.aOperationDelay);
+// 	console.log('operationDelayTime52b: ' + opts.bOperationDelay);
 
-	// var ioControl = new IOControl({
-	IOControl({
-		breakerModel: opts.breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-		startPosition: opts.startPosition, // 'close', // 'trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', // 
-		// recloserType: 'independent', // 'ganged', // 
-		operationMode: opts.operationMode, // '1trip 1close', // '3trip 3close', // '1trip 3close', //
-		debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
-		operationDelayTime52a: opts.aOperationDelay, // 50,
-		operationDelayTime52b: opts.bOperationDelay // 75
-		// operationDurationTime52a: 50,
-		// operationDurationTime52b: 50
-	});
-}
+// 	// var ioControl = new IOControl({
+// 	IOControl({
+// 		breakerModel: opts.breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
+// 		startPosition: opts.startPosition, // 'close', // 'trip', // 
+// 		edge: 'both', // 'none', // 'rising', // 'falling', // 
+// 		// recloserType: 'independent', // 'ganged', // 
+// 		operationMode: opts.operationMode, // '1trip 1close', // '3trip 3close', // '1trip 3close', //
+// 		debounceTime: (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), // The watch callback will not be invoked until the input stops bouncing and has been in a stable state for debounceTimeout milliseconds.
+// 		operationDelayTime52a: opts.aOperationDelay, // 50,
+// 		operationDelayTime52b: opts.bOperationDelay // 75
+// 		// operationDurationTime52a: 50,
+// 		// operationDurationTime52b: 50
+// 	});
+// }
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
@@ -245,8 +222,8 @@ process.on('uncaughtException', function(err) {
 // entry point.
 //module.exports = init();
 module.exports = {
-	init: init(),
+	init: IOInit(), // init(),
 	debounceTime: debounceTime
-// 	// initWithValues: library1WithValues
-// 	// lib1: library1(breakerModel)
+	// 	// initWithValues: library1WithValues
+	// 	// lib1: library1(breakerModel)
 };

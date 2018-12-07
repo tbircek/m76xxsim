@@ -17,9 +17,9 @@
 
 // TODO: Add file reading system instead of hard coding pins.
 
-var debug = true;
+// var debug = true;
 
-if (debug) {
+if (process.env.NODE_ENV === 'development') {
 	var assert = require('assert');
 }
 
@@ -33,9 +33,12 @@ const Logic0 = 0;
 const Gpio = require('onoff').Gpio;
 
 function m76xxIOs(opts) {
+	
+	this.bind({
+		aOperationDelay: opts.aOperationDelay
+	});
 
-	
-	
+
 	// Phase A Setup
 	const { Phs_A_Cls, Phs_A_Opn, PhA_52a, PhA_52b, Close_PhA, Trip_PhA } = Setup_Phase_A(opts);
 	// Phase B
@@ -47,7 +50,7 @@ function m76xxIOs(opts) {
 	// Fault interrupt for Ig or Ineu.
 	const { Neu_Gnd_Cls, Neu_Gnd_Opn } = Setup_Neu_Gnd();
 
-	if (debug) {
+	if (process.env.NODE_ENV === 'development') {
 		// reset counters.
 		var phATripCounter = 0;
 		var phACloseCounter = 0;
@@ -61,7 +64,6 @@ function m76xxIOs(opts) {
 		var totalTripTime = 0;
 		console.log('m76xxIOs:\n\tPhase IOs activated...');
 		console.log('\t52a Delay:\t%dms\t52b Delay:\t%dms', opts.aOperationDelay, opts.bOperationDelay);
-		// console.log('\t52 Duration:\t%dms\t52b Duration:\t%dms', opts.operationDelayTime52a, opts.operationDelayTime52b);
 	}
 
 	/************************************************************
@@ -74,7 +76,6 @@ function m76xxIOs(opts) {
 
 	// Operate 52a and/or 52b immediately.
 	if (opts.startPosition === 'close') {
-		// switch (opts.breakerModel) {
 		switch (opts.breakerModel) {
 			case '52a only':
 			case '52a only, 52b':
@@ -135,11 +136,11 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Close A_breakerModel: ' + opts.breakerModel);
 			console.log('value: ' + value);
 		}
-		
+
 		if (opts.breakerModel.includes('a only')) {
 			console.log('52a only... right?');
 			Close_PhA_52a_Only();
@@ -155,23 +156,6 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Close_PhA_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Close_PhA_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Close_PhA_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		// break;
-		// }
 	});
 
 	Trip_PhA.watch(function(err, value) {
@@ -179,11 +163,11 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Trip A_breakerModel: ' + opts.breakerModel);
 			console.log('value: ' + value);
 		}
-		
+
 		if (opts.breakerModel.includes('a only')) {
 			console.log('52a only... right?');
 			Trip_PhA_52a_Only();
@@ -199,23 +183,6 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Trip_PhA_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Trip_PhA_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Trip_PhA_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		break;
-		// }
 	});
 
 	// Ph B operations.
@@ -224,10 +191,10 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Close B_breakerModel: ' + opts.breakerModel);
 		}
-		
+
 		if (opts.breakerModel.includes('a only')) {
 			console.log('52a only... right?');
 			Close_PhB_52a_Only();
@@ -243,23 +210,6 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Close_PhB_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Close_PhB_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Close_PhB_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		break;
-		// }
 	});
 
 	Trip_PhB.watch(function(err, value) {
@@ -267,10 +217,10 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Trip B_breakerModel: ' + opts.breakerModel);
 		}
-		
+
 		if (opts.breakerModel.includes('a only')) {
 			console.log('52a only... right?');
 			Trip_PhB_52a_Only();
@@ -286,23 +236,6 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Trip_PhB_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Trip_PhB_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Trip_PhB_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		break;
-		// }
 	});
 
 	// Ph C operations.
@@ -311,10 +244,10 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Close C_breakerModel: ' + opts.breakerModel);
 		}
-		
+
 		if (opts.breakerModel.includes('a only')) {
 			console.log('52a only... right?');
 			Close_PhC_52a_Only();
@@ -330,23 +263,6 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Close_PhC_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Close_PhC_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Close_PhC_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		break;
-		// }
 	});
 
 	Trip_PhC.watch(function(err, value) {
@@ -354,7 +270,7 @@ function m76xxIOs(opts) {
 			throw err;
 		}
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('Trip C_breakerModel: ' + opts.breakerModel);
 		}
 
@@ -373,32 +289,15 @@ function m76xxIOs(opts) {
 		else {
 			console.log('Sorry, we are out of ' + opts.breakerModel + '.');
 		}
-		// switch (opts.breakerModel) {
-		// 	case '52a only':
-		// 	case '52a only, 52b':
-		// 		Trip_PhC_52a_Only();
-		// 		break;
-		// 	case '52b only':
-		// 	case '52a, 52b only':
-		// 		Trip_PhC_52b_Only();
-		// 		break;
-		// 	case '52a, 52b':
-		// 	case '52a, 52b/69':
-		// 		Trip_PhC_52a_52b();
-		// 		break;
-		// 	default:
-		// 		console.log('Sorry, we are out of ' + opts.breakerModel + '.');
-		// 		break;
-		// }
 	});
 
 	// Handles Trip operation of Phase A.
 	// 52a only
 	function Trip_PhA_52a_Only() {
-		// Wait out for 52a delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - TRIP PH A is running.');
 		}
+		// Wait out for 52a delay time.
 		Phs_A_Cls.writeSync(Logic0);
 		Phs_A_Opn.writeSync(Logic1);
 		PhA_52a.writeSync(Logic0);
@@ -408,7 +307,7 @@ function m76xxIOs(opts) {
 	// 52a only
 	function Trip_PhB_52a_Only() {
 		// Wait out for 52a delay time
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - TRIP PH B is running.');
 		}
 		Phs_B_Cls.writeSync(Logic0);
@@ -420,7 +319,7 @@ function m76xxIOs(opts) {
 	// 52a only
 	function Trip_PhC_52a_Only() {
 		// Wait out for 52a delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - TRIP PH C is running.');
 		}
 		Phs_C_Cls.writeSync(Logic0);
@@ -432,7 +331,7 @@ function m76xxIOs(opts) {
 	// 52b only
 	function Trip_PhA_52b_Only() {
 		// Wait out for 52b delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - TRIP PH A is running.');
 		}
 		Phs_A_Cls.writeSync(Logic0);
@@ -444,7 +343,7 @@ function m76xxIOs(opts) {
 	// 52b only
 	function Trip_PhB_52b_Only() {
 		// Wait out for 52b delay time. 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - TRIP PH B is running.');
 		}
 		Phs_B_Cls.writeSync(Logic0);
@@ -456,21 +355,19 @@ function m76xxIOs(opts) {
 	// 52b only
 	function Trip_PhC_52b_Only() {
 		// Wait out for 52b delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - TRIP PH C is running.');
 		}
 		Phs_C_Cls.writeSync(Logic0);
 		Phs_C_Opn.writeSync(Logic1);
 		PhC_52b.writeSync(Logic1);
-		// }, opts.operationDelayTime52b);
 	}
 
 	// Handles Trip operation of Phase A.
 	// 52a, 52b
 	// 52a, 52b/69
 	function Trip_PhA_52a_52b() {
-
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phACloseCounter = 0;
 			var phATripStart = process.hrtime();
 			console.log('52a, 52b - TRIP PH A is running.');
@@ -493,12 +390,7 @@ function m76xxIOs(opts) {
 			PhA_52b.writeSync(Logic1);
 		}, opts.operationDelayTime52b);
 
-		// // Wait out for 52b duration time. 
-		// setTimeout(function() {
-
-		// }, opts.operationDelayTime52b);
-
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phATripCounter++;
 			totalTripCounter++;
 			var phATripStop = process.hrtime(phATripStart);
@@ -512,7 +404,7 @@ function m76xxIOs(opts) {
 	// 52a, 52b
 	// 52a, 52b/69
 	function Trip_PhB_52a_52b() {
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phBCloseCounter = 0;
 			var phBTripStart = process.hrtime();
 			console.log('52a, 52b - TRIP PH B is running.');
@@ -535,7 +427,7 @@ function m76xxIOs(opts) {
 			PhB_52b.writeSync(Logic1);
 		}, opts.tripTime52bDelay);
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phBTripCounter++;
 			totalTripCounter++;
 			var phBTripStop = process.hrtime(phBTripStart);
@@ -549,7 +441,7 @@ function m76xxIOs(opts) {
 	// 52a, 52b
 	// 52a, 52b/69
 	function Trip_PhC_52a_52b() {
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phCCloseCounter = 0;
 			var phCTripStart = process.hrtime();
 			console.log('52a, 52b - TRIP PH C is running.');
@@ -572,7 +464,7 @@ function m76xxIOs(opts) {
 			PhC_52b.writeSync(Logic1);
 		}, opts.tripTime52bDelay);
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phCTripCounter++;
 			totalTripCounter++;
 			var phCTripStop = process.hrtime(phCTripStart);
@@ -586,7 +478,7 @@ function m76xxIOs(opts) {
 	// 52a only
 	function Close_PhA_52a_Only() {
 		// Wait out for 52a delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - CLOSE PH A is running.');
 		}
 		Phs_A_Cls.writeSync(Logic1);
@@ -601,7 +493,7 @@ function m76xxIOs(opts) {
 	// 52a only
 	function Close_PhB_52a_Only() {
 		// Wait out for 52a delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - CLOSE PH B is running.');
 		}
 		Phs_B_Cls.writeSync(Logic0);
@@ -614,7 +506,7 @@ function m76xxIOs(opts) {
 	// 52a only
 	function Close_PhC_52a_Only() {
 		// Wait out for 52a delay time. 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52a only - CLOSE PH C is running.');
 		}
 		Phs_C_Cls.writeSync(Logic1);
@@ -626,7 +518,7 @@ function m76xxIOs(opts) {
 	// 52b only
 	function Close_PhA_52b_Only() {
 		// Wait out for 52b delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - CLOSE PH A is running.');
 		}
 		Phs_A_Cls.writeSync(Logic1);
@@ -638,7 +530,7 @@ function m76xxIOs(opts) {
 	// 52b only
 	function Close_PhB_52b_Only() {
 		// Wait out for 52b delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - CLOSE PH B is running.');
 		}
 		Phs_B_Cls.writeSync(Logic1);
@@ -648,7 +540,7 @@ function m76xxIOs(opts) {
 
 	function Close_PhC_52b_Only() {
 		// Wait out for 52b delay time.
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			console.log('52b only - CLOSE PH C is running.');
 		}
 		Phs_C_Cls.writeSync(Logic1);
@@ -661,8 +553,7 @@ function m76xxIOs(opts) {
 	// 52a, 52b
 	// 52a, 52b/69
 	function Close_PhA_52a_52b() {
-
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phATripCounter = 0;
 			var phACloseStart = process.hrtime();
 			console.log('52a, 52b - CLOSE PH A is running.');
@@ -689,12 +580,7 @@ function m76xxIOs(opts) {
 			PhA_52a.writeSync(Logic1);
 		}, opts.operationDelayTime52a);
 
-		// // Wait out for 52a delay time.
-		// setTimeout(function() {
-
-		// }, opts.operationDelayTime52a);
-
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phACloseCounter++;
 			totalCloseCounter++;
 			var phACloseStop = process.hrtime(phACloseStart);
@@ -709,7 +595,7 @@ function m76xxIOs(opts) {
 	// 52a, 52b/69
 	function Close_PhB_52a_52b() {
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phBTripCounter = 0;
 			var phBCloseStart = process.hrtime();
 			console.log('52a, 52b - CLOSE PH B is running.');
@@ -731,7 +617,7 @@ function m76xxIOs(opts) {
 			PhB_52a.writeSync(Logic1);
 		}, opts.closeTime52aDelay);
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phBCloseCounter++;
 			totalCloseCounter++;
 			var phBCloseStop = process.hrtime(phBCloseStart);
@@ -746,7 +632,7 @@ function m76xxIOs(opts) {
 	// 52a, 52b/69
 	function Close_PhC_52a_52b() {
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phCTripCounter = 0;
 			var phCCloseStart = process.hrtime();
 			console.log('52a, 52b - CLOSE PH C is running.');
@@ -769,7 +655,7 @@ function m76xxIOs(opts) {
 			PhC_52a.writeSync(Logic1);
 		}, opts.closeTime52aDelay);
 
-		if (debug) {
+		if (process.env.NODE_ENV === 'development') {
 			phCCloseCounter++;
 			totalCloseCounter++;
 			var phCCloseStop = process.hrtime(phCCloseStart);
@@ -782,8 +668,9 @@ function m76xxIOs(opts) {
 
 // Setup Phase A IOs.
 function Setup_Phase_A(opts) {
-
-	console.log('\t\t\t\tSetup Phase A setup is RUNNING');
+	if (process.env.NODE_ENV === 'development') {
+		console.log('<=== Setup Phase A setup is RUNNING ===>');
+	}
 	const Close_PhA = new Gpio(26, 'in', opts.edge, {
 		debounceTimeout: opts.debounceTime,
 		label: 'Close_PhA'
@@ -806,7 +693,7 @@ function Setup_Phase_A(opts) {
 		label: 'Phs_A_Opn'
 	}); // Phs_A_Opn
 
-	if (debug) {
+	if (process.env.NODE_ENV === 'development') {
 		// verify actual vs set values.
 		assesValues(Close_PhA, Trip_PhA, opts, 'Close_PhA', 'Trip_PhA');
 	}
@@ -816,6 +703,9 @@ function Setup_Phase_A(opts) {
 
 // Setup Phase B IOs.
 function Setup_Phase_B(opts) {
+	if (process.env.NODE_ENV === 'development') {
+		console.log('<=== Setup Phase B setup is RUNNING ===>');
+	}
 	const Close_PhB = new Gpio(46, 'in', opts.edge, {
 		debounceTimeout: opts.debounceTime,
 		label: 'Close_PhB'
@@ -837,7 +727,7 @@ function Setup_Phase_B(opts) {
 		label: 'Phs_B_Opn'
 	}); // Phs_B_Opn
 
-	if (debug) {
+	if (process.env.NODE_ENV === 'development') {
 		// verify actual vs set values.
 		assesValues(Close_PhB, Trip_PhB, opts, 'Close_PhB', 'Trip_PhB');
 	}
@@ -846,6 +736,9 @@ function Setup_Phase_B(opts) {
 
 // Setup Phase C IOs.
 function Setup_Phase_C(opts) {
+	if (process.env.NODE_ENV === 'development') {
+		console.log('<=== Setup Phase C setup is RUNNING ===>');
+	}
 	const Close_PhC = new Gpio(65, 'in', opts.edge, {
 		debounceTimeout: opts.debounceTime,
 		label: 'Close_PhC'
@@ -867,7 +760,7 @@ function Setup_Phase_C(opts) {
 		label: 'Phs_C_Opn'
 	}); // Phs_C_Opn
 
-	if (debug) {
+	if (process.env.NODE_ENV === 'development') {
 		// verify actual vs set values.
 		assesValues(Close_PhC, Trip_PhC, opts, 'Close_PhC', 'Trip_PhC');
 	}
@@ -876,6 +769,9 @@ function Setup_Phase_C(opts) {
 
 // Fault interrupt setup for Ig or Ineu.
 function Setup_Neu_Gnd() {
+	if (process.env.NODE_ENV === 'development') {
+		console.log('<=== Setup Neu_Gnd setup is RUNNING ===>');
+	}
 	const Neu_Gnd_Cls = new Gpio(50, 'out', {
 		label: 'Neu_Gnd_Cls'
 	}); // Neu_Gnd_Cls
@@ -897,35 +793,17 @@ function assesValues(close, trip, params, closeLabel, tripLabel) {
 	console.log('\t%s:\tDebounceTimeout: %dms\tEdge: %s', tripLabel, trip._debounceTimeout, trip.edge());
 }
 
-m76xxIOs.prototype.init = function(opts) {
-	console.log('m-76xx.prototype.init');
-	// }
-	// switch (opts.input.function) {
-	//   case 0:
-	//     // code for 52a Phase A, Phase B, Phase C.
-	//     break;
-
-	//   case 3:
-	//     // code
-	//     break;
-
-	//   case 18:
-	//     // code for 52a Phases ABC.
-	//     break;
-
-	//   case 19:
-	//     // code
-	//     break;
-
-	//   default:
-	//     // code
-	// }
-};
+// m76xxIOs.prototype.init = function(opts) {
+// 	console.log('m-76xx.prototype.init');
+// };
 
 (function() {
 	this.prop = "";
 }).call(m76xxIOs.prototype);
 
 exports.m76xxIOs = m76xxIOs;
+exports.m76xxIOs.aOperationDelay = function() {
+	return this.aOperationDelay;
+};
 // exports.m76xxIOs.Setup_Phase_A = m76xxIOs.Setup_Phase_A;
 // exports.m76xxIOs.Close_PhA_52a_52b = m76xxIOs.Close_PhA_52a_52b;

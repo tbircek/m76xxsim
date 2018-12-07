@@ -63,7 +63,7 @@ function SetupInputs(name, gpio, direction) {
 }
 
 // output attributes
-function SetupOutputs(name, gpio, direction) {
+var SetupOutputs = function (name, gpio, direction) {
 
 	// UserSetupInputs.call(this, userInput);
 
@@ -71,29 +71,36 @@ function SetupOutputs(name, gpio, direction) {
 	IOs.call(this, name, gpio, direction);
 
 	// Setup input.
-	let newGpio = new Gpio(this.gpio, this.direction, {
+	this.output = new Gpio(this.gpio, this.direction, {
 		label: this.name
 	});
-	console.log('SetupOutputs:\t' + this.name + '  \tBreaker model:\t' + this.breakerModel + '\tNew GPIO:\t' + this.gpio);
+	
+	if (process.env.NODE_ENV === 'development') {
+		// console.log(output);
+		console.log('SetupOutputs:\tNew GPIO:\t' + this.output._gpio);
 	// Operator.operate.call(this, newGpio);
-}
+	}
+};
+
+SetupOutputs.prototype.close = function(){
+	this.output.writeSync(1);
+};
 
 // user specified items.
 function UserSetupInputs(opts) {
 
 	// User specified items.
 	this.breakerModel = opts.breakerModel;
-	this.cbStartPosition = opts.cbStartPosition;
+	this.startPosition = opts.startPosition;
 	this.edge = opts.edge;
-	// this.recloserType = recloserType;
 	this.operationMode = opts.operationMode;
-	this.tripTime52aDelay = opts.tripTime52aDelay;
-	this.tripTime52bDelay = opts.tripTime52bDelay;
-	this.closeTime52aDelay = opts.closeTime52aDelay;
-	this.closeTime52bDelay = opts.closeTime52bDelay;
+	this.debounceTime = opts.debounceTime;
+	this.aOperationDelay = opts.aOperationDelay;
+	this.bOperationDelay = opts.bOperationDelay;
 
 	console.log('Breaker model:\t' + this.breakerModel);
 }
+
 
 module.exports = {
 	UserInputs: UserSetupInputs,

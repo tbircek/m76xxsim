@@ -1,18 +1,20 @@
 // var Resources = require('../models/labelsModel');
 // var formData = require('../public/javascripts/main.js').formData;
-
+const debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
+// const sim = require('../public/javascripts/m76xxIOs').m76xxIOs;
+const sim = require('../public/javascripts/m76xx-io-setup').UserInputs;
 // var formData = require('form-data'); // new FormData();
 
 // var formData = new FormData(document.querySelector('#m76xxsimForm'));
 // INDEX page.
 exports.index = function(req, res) {
-	
+
 	res.render('index', {
 		title: 'Recloser Simulator', // formData.get('title'), //  
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: 'Development Server --- v2018.12.05',
+		ver: process.env.NODE_ENV + ' --- v2018.12.05',
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -26,7 +28,7 @@ exports.index = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [60, 60]
+		defaultValues: [sim.aOperationDelay, sim.bOperationDelay]
 	});
 };
 
@@ -38,13 +40,13 @@ exports.settings_update_put = function(req, res) {
 	console.log('operationMode: ' + req.query.operationMode);
 	console.log('aOperationDelay: ' + req.query.aOperationDelay);
 	console.log('bOperationDelay: ' + req.query.bOperationDelay);
-	
+
 	res.render('index', {
 		title: 'Recloser Simulator',
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: 'Development Server --- v2018.12.05',
+		ver: process.env.NODE_ENV + ' --- v2018.12.05',
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -60,9 +62,7 @@ exports.settings_update_put = function(req, res) {
 		infoButton: 'Monitor',
 		defaultValues: [req.query.aOperationDelay, req.query.bOperationDelay]
 	});
-	
-	let debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
-	let sim = require('../public/javascripts/m76xxIOs').m76xxIOs;
+
 	// sim.init(req.query.breakerModel, req.query.startPosition,req.query.operationMode,req.query.aOperationDelay,req.query.bOperationDelay);
 	sim({
 		breakerModel: req.query.breakerModel,
