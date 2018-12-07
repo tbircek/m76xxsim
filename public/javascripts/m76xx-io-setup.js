@@ -29,26 +29,13 @@ const Gpio = require('onoff').Gpio;
 
 // common IO attributes.
 function IOs(name, gpio, direction) {
-
-	// this.breakerModel = userInput.breakerModel;
-	// this.cbStartPosition = userInput.cbStartPosition;
-	// this.recloserType = userInput.recloserType;
-	// this.operationMode = userInput.operationMode;
-	// this.tripTime52aDelay = userInput.tripTime52aDelay;
-	// this.tripTime52bDelay = userInput.tripTime52bDelay;
-	// this.closeTime52aDelay = userInput.closeTime52aDelay;
-	// this.closeTime52bDelay = userInput.closeTime52bDelay;
 	this.name = name;
 	this.gpio = gpio;
 	this.direction = direction;
-
-	// console.log(this.name + '\t' + this.gpio);
 }
 
 // input attributes
 function SetupInputs(name, gpio, direction) {
-
-	// UserSetupInputs.call(this, userInput);
 
 	// General io stuff.
 	IOs.call(this, name, gpio, direction);
@@ -84,7 +71,7 @@ function SetupOutputs(name, gpio, direction) {
 	IOs.call(this, name, gpio, direction);
 
 	// Setup input.
-	var newGpio = new Gpio(this.gpio, this.direction, {
+	let newGpio = new Gpio(this.gpio, this.direction, {
 		label: this.name
 	});
 	console.log('SetupOutputs:\t' + this.name + '  \tBreaker model:\t' + this.breakerModel + '\tNew GPIO:\t' + this.gpio);
@@ -92,27 +79,18 @@ function SetupOutputs(name, gpio, direction) {
 }
 
 // user specified items.
-function UserSetupInputs(
-	breakerModel,
-	cbStartPosition,
-	edge,
-	// recloserType,
-	operationMode,
-	tripTime52aDelay,
-	tripTime52bDelay,
-	closeTime52aDelay,
-	closeTime52bDelay) {
+function UserSetupInputs(opts) {
 
 	// User specified items.
-	this.breakerModel = breakerModel;
-	this.cbStartPosition = cbStartPosition;
-	this.edge = edge;
+	this.breakerModel = opts.breakerModel;
+	this.cbStartPosition = opts.cbStartPosition;
+	this.edge = opts.edge;
 	// this.recloserType = recloserType;
-	this.operationMode = operationMode;
-	this.tripTime52aDelay = tripTime52aDelay;
-	this.tripTime52bDelay = tripTime52bDelay;
-	this.closeTime52aDelay = closeTime52aDelay;
-	this.closeTime52bDelay = closeTime52bDelay;
+	this.operationMode = opts.operationMode;
+	this.tripTime52aDelay = opts.tripTime52aDelay;
+	this.tripTime52bDelay = opts.tripTime52bDelay;
+	this.closeTime52aDelay = opts.closeTime52aDelay;
+	this.closeTime52bDelay = opts.closeTime52bDelay;
 
 	console.log('Breaker model:\t' + this.breakerModel);
 }

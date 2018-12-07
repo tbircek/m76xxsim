@@ -1,21 +1,21 @@
 block input2
-  div(class='card')
-    div(class='card-header')
-      h6 Input 2
-    div(class='card-body')
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
-          input(type='radio' class='custom-control-input' id='input2-selection-abc' name='bOptions'  value='52a' required checked onclick='getOption()')
-          label(class='custom-control-label' for='input2-selection-abc') 52b Phases ABC
-          
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='Not supported. 3ph Ganged with Lockout')
-          input(type='radio' class='custom-control-input' id='input2-selection.Lockout' name='bOptions'  value='52a' required onclick='getOption()' disabled)
-          label(class='custom-control-label' for='input2-selection.Lockout') 52b/69 Lockout ABC
-          
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='Individual Phase')
-          input(type='radio' class='custom-control-input' id='input2-selection-a' name='bOptions' value='52a' required onclick='getOption()')
-          label(class='custom-control-label' for='input2-selection-a') 52b Phase A
-          
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='52b is not used')
-          input(type='radio' class='custom-control-input' id='input2-selection-general' name='bOptions' value='52a only' required onclick='getOption()')
-          label(class='custom-control-label' for='input2-selection-general') General
-      div(class='invalid-feedback') Select a Breaker Model option for Input 2
+	div(class='card')
+		div(class='card-header')
+			h6 M76xx Inputs 2,7,9
+		div(class='card-body')
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
+					input(type='radio' class='custom-control-input' id='input2-selection-abc' name='bOptions'  value='52a' required checked onclick='getOption()')
+					label(class='custom-control-label' for='input2-selection-abc') 52b Phases ABC
+					
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='Not supported. 3ph Ganged with Lockout')
+					input(type='radio' class='custom-control-input' id='input2-selection.Lockout' name='bOptions'  value='52a' required onclick='getOption()' disabled)
+					label(class='custom-control-label' for='input2-selection.Lockout') 52b/69 Lockout ABC
+					
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='Individual Phase')
+					input(type='radio' class='custom-control-input' id='input2-selection-a' name='bOptions' value='52a' required onclick='getOption()')
+					label(class='custom-control-label' for='input2-selection-a') 52b Phase A
+					
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='52b is not used')
+					input(type='radio' class='custom-control-input' id='input2-selection-general' name='bOptions' value='52a only' required onclick='getOption()')
+					label(class='custom-control-label' for='input2-selection-general') General
+			div(class='invalid-feedback') Select a Breaker Model option for Input 2

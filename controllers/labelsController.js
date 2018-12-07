@@ -12,7 +12,7 @@ exports.index = function(req, res) {
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: 'v2018.12.05',
+		ver: 'Development Server --- v2018.12.05',
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -26,10 +26,8 @@ exports.index = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [50, 75]
+		defaultValues: [60, 60]
 	});
-	
-	// var mainJS = require('../public/javascripts/main.js');
 };
 
 exports.settings_update_put = function(req, res) {
@@ -40,26 +38,13 @@ exports.settings_update_put = function(req, res) {
 	console.log('operationMode: ' + req.query.operationMode);
 	console.log('aOperationDelay: ' + req.query.aOperationDelay);
 	console.log('bOperationDelay: ' + req.query.bOperationDelay);
-
-	// if (req.query.breakerModel === undefined) {
-	// 	req.query.breakerModel = '52a, 52b';
-	// }
-	var sim = require('../public/javascripts/m76xxsim').initWithValues;
-
-	new sim({
-		breakerModel: req.query.breakerModel,
-		startPosition: req.query.startPosition,
-		operationMode: req.query.operationMode,
-		aOperationDelay: req.query.aOperationDelay,
-		bOperationDelay: req.query.bOperationDelay
-	});
-
+	
 	res.render('index', {
-		title: 'Recloser Simulator', // formData.get('title'), //  
+		title: 'Recloser Simulator',
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: 'v2018.12.05',
+		ver: 'Development Server --- v2018.12.05',
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -73,24 +58,19 @@ exports.settings_update_put = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [50, 75]
+		defaultValues: [req.query.aOperationDelay, req.query.bOperationDelay]
 	});
-	// console.log('brakerModel: ' + req.query.aOptions + ', ' + req.query.bOptions);
-	// sim.initWithValues(null, null, null, null, null, null);
-	// 	sim.breakerModel = req.query.aOptions + ', ' + req.query.bOptions //,
-
-	// );
-
-	// var queryStuff = JSON.stringify(req.query);
-	// var queryStuff = req.query.parse(req.query, { parameterLimit: 7 });
-	// console.log(queryStuff);
-
-	// res.send('NOT IMPLEMENTED: update PUT' + queryStuff);
-	// res.json({
-	// 	breakerModel: req.query.breakerModel,
-	// 	startPositions: req.query.startPositions,
-	// 	operationMode: req.query.operationMode,
-	// 	aOperationDelay: req.query.aOperationDelay,
-	// 	bOperationDelay: req.query.bOperationDelay
-	// });
+	
+	let debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
+	let sim = require('../public/javascripts/m76xxIOs').m76xxIOs;
+	// sim.init(req.query.breakerModel, req.query.startPosition,req.query.operationMode,req.query.aOperationDelay,req.query.bOperationDelay);
+	sim({
+		breakerModel: req.query.breakerModel,
+		startPosition: req.query.startPosition,
+		edge: 'both', // 'none', // 'rising', // 'falling', // 
+		operationMode: req.query.operationMode,
+		debounceTime: debounceTime,
+		aOperationDelay: req.query.aOperationDelay,
+		bOperationDelay: req.query.bOperationDelay
+	});
 };

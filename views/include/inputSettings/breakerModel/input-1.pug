@@ -1,18 +1,18 @@
 block input1
-  div(class='card')
-    div(class='card-header')
-      h6 Input 1
-    div(class='card-body')
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
-          input(type='radio' class='custom-control-input'  id='input1-selection-abc' name='aOptions' value='52b' required checked onclick='getOption()')
-          label(class='custom-control-label' for='input1-selection-abc') #{aOptions[0]}
-          
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='Individual Phase')
-          input(type='radio' class='custom-control-input' id='input1-selection-a' name='aOptions' value='52b' required onclick='getOption()')
-          label(class='custom-control-label' for='input1-selection-a')  #{aOptions[1]}
-          
-      div(class='custom-control custom-radio' data-toggle='tooltip' title='52a is not used')
-          input(type='radio' class='custom-control-input' id='input1-selection-general' name='aOptions' value='52b only' required onclick='getOption()')
-          label(class='custom-control-label' for='input1-selection-general')  #{aOptions[2]}
-      div(class='invalid-feedback') Select a Breaker Model option for Input 1
-      
+	div(class='card')
+		div(class='card-header')
+			h6 M-76xx Inputs 1,6,8
+		div(class='card-body')
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='3ph Ganged')
+					input(type='radio' class='custom-control-input'  id='input1-selection-abc' name='aOptions' value='52b' required checked onclick='getOption()')
+					label(class='custom-control-label' for='input1-selection-abc') #{aOptions[0]}
+					
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='Individual Phase')
+					input(type='radio' class='custom-control-input' id='input1-selection-a' name='aOptions' value='52b' required onclick='getOption()')
+					label(class='custom-control-label' for='input1-selection-a')  #{aOptions[1]}
+					
+			div(class='custom-control custom-radio' data-toggle='tooltip' title='52a is not used')
+					input(type='radio' class='custom-control-input' id='input1-selection-general' name='aOptions' value='52b only' required onclick='getOption()')
+					label(class='custom-control-label' for='input1-selection-general')  #{aOptions[2]}
+			div(class='invalid-feedback') Select a Breaker Model option for Input 1
+			
