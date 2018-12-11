@@ -20,27 +20,19 @@
  *                        52a, 52b -> Inputs 1, 2, 6, 7, 8, 9 used.
  *                        52a, 52b/69 -> For future use only.
  * 
- * cbPosition:  default start up position for the simulator.
- *              Depending on selected breakerModel, the simulator
- *              set 52a and/or 52b as Close or Trip.
- *              options: 
- *                      Close
- *                      Trip
+ * startPosition:  default start up position for the simulator.
+ *                 Depending on selected breakerModel, the simulator
+ *                 set 52a and/or 52b as Close or Trip.
+ *                 options: 
+ *                        Close
+ *                        Trip
  * 
- * recloserType: match with System Setup>System>Recloser Type.
- *               options:
- *                      3ph Ganged
- *                      Independent Phase Capable
- * 
- * operationMode: match F79 function>Operation Mode.
- *                3ph ganged options:
- *                                   
  */
 
 // interface to inputs/oututs of beaglebone black.
-const beagle = require('./m76xx-io-setup');
+const beagle = require('./m76xxIOSetup');
 
-var IOControl = require('./m76xxIOs').m76xxIOs;
+// var IOControl = require('./m76xxIOs').m76xxIOs;
 
 // // Holds all input values and initialize default values.
 // var formData = new FormData();
@@ -52,89 +44,92 @@ var IOControl = require('./m76xxIOs').m76xxIOs;
 // const lcd = require('./lcd');
 
 
-const beagle3_3V = 3.3; // 3.3V power supply
-const VIH = 2.0; // High-level input voltage per datasheet
-const VHYS = 0.44; // max Hysteresis voltage at an input per datasheet
-const logicHighVoltage = VIH + VHYS; // calculated High-level input voltage
-const resistorSize = 2.4e3 * 1.05; // 2.4Kohm
-const capSize = 4.7e-6 * 1.2; // 4.7uF cap
-const secTomsecRate = 1e3; // 1 sec = 1000msec
-const logicHighRatio = (beagle3_3V - logicHighVoltage) / beagle3_3V;
-const debounceTime = (-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2);
+// function init(breakerModel = '52a, 52b', startPosition = 'close', operationMode = '3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
 
-function init(breakerModel = '52a, 52b', startPosition = 'close', operationMode = '3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
+// 	if (process.env.NODE_ENV === 'development') {
+// 		console.log('new init() active');
+// 		console.log('breakerModel: ' + breakerModel);
+// 		console.log('startPosition: ' + startPosition);
+// 		console.log('operationMode: ' + operationMode);
+// 		console.log('operationDelayTime52a: ' + aOperationDelay);
+// 		console.log('operationDelayTime52b: ' + bOperationDelay);
+// 	}
 
-	if (process.env.NODE_ENV === 'development') {
-		console.log('new init() active');
-		console.log('breakerModel: ' + breakerModel);
-		console.log('startPosition: ' + startPosition);
-		console.log('operationMode: ' + operationMode);
-		console.log('operationDelayTime52a: ' + aOperationDelay);
-		console.log('operationDelayTime52b: ' + bOperationDelay);
-	}
+// 	// activeLibrary;
+// 	// library1();
+// 	// IOInit();
+// 	new IOControl({
+// 		breakerModel: breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
+// 		startPosition: startPosition, // 'close', // 'trip', // 
+// 		edge: 'both', // 'none', // 'rising', // 'falling', //
+// 		operationMode: operationMode, //'3trip 3close', // '1trip 1close', // '1trip 3close', //
+// 		debounceTime: debounceTime,
+// 		aOperationDelay: aOperationDelay, // 60,
+// 		bOperationDelay: bOperationDelay //60
+// 	});
 
-	// activeLibrary;
-	// library1();
-	// IOInit();
-	new IOControl({
-		breakerModel: breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
-		startPosition: startPosition, // 'close', // 'trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', //
-		operationMode: operationMode, //'3trip 3close', // '1trip 1close', // '1trip 3close', //
-		debounceTime: debounceTime,
-		aOperationDelay: aOperationDelay, // 60,
-		bOperationDelay: bOperationDelay //60
-	});
-
-	// initialization completed.
-	console.log('m76xxsim init completed...');
-}
+// 	// initialization completed.
+// 	console.log('m76xxsim init completed...');
+// }
 
 
 function IOInit(breakerModel = '52a, 52b', startPosition = 'close', operationMode = '3trip 3close', aOperationDelay = 60, bOperationDelay = 60) {
 
-	// attach these values to user interface in web server.
-	var userValues = {
+	// // attach these values to user interface in web server.
+	let userValues = {
 		breakerModel: breakerModel, // '52a, 52b', //'52a only', '52b only', '52a, 52b/69'
 		startPosition: startPosition, // 'close', // 'trip', // 
-		edge: 'both', // 'none', // 'rising', // 'falling', //
 		operationMode: operationMode, //'3trip 3close', // '1trip 1close', // '1trip 3close', //
-		debounceTime: debounceTime,
 		aOperationDelay: aOperationDelay, // 60,
 		bOperationDelay: bOperationDelay //60
 	};
+
 	new beagle.UserInputs(userValues);
-	
+
+	if (process.env.NODE_ENV === 'development') {
+		console.log('IOInit:\tNew userValues:');
+		console.log('IOInit:\tNew userValues:\tBreaker Model: ' + userValues.breakerModel);
+		console.log('IOInit:\tNew userValues:\tStart Position: ' + userValues.startPosition);
+		console.log('IOInit:\tNew userValues:\tOperation Mode: ' + userValues.operationMode);
+		console.log('IOInit:\tNew userValues:\t52a Operation Delay: ' + userValues.aOperationDelay);
+		console.log('IOInit:\tNew userValues:\t52b Operation Delay: ' + userValues.bOperationDelay);
+	}
+
 	// Phase A items.
-	var PhA_52a = new beagle.Outputs('PhA_52a', 30, 'out');
-	const PhA_52b = new beagle.Outputs('PhA_52b', 115, 'out');
-	const Phs_A_Cls = new beagle.Outputs('Phs_A_Cls', 88, 'out');
-	const Phs_A_Opn = new beagle.Outputs('Phs_A_Opn', 112, 'out');
-	const Close_PhA = new beagle.Inputs('Close_PhA', 26, 'in');
-	const Trip_PhA = new beagle.Inputs('Trip_PhA', 47, 'in');
+	let PhA_52a = new beagle.Outputs('PhA_52a', 30, 'out');
+	let PhA_52b = new beagle.Outputs('PhA_52b', 115, 'out');
+	let Phs_A_Cls = new beagle.Outputs('Phs_A_Cls', 88, 'out');
+	let Phs_A_Opn = new beagle.Outputs('Phs_A_Opn', 112, 'out');
+	let Close_PhA = new beagle.Inputs('Close_PhA', 26, 'in');
+	let Trip_PhA = new beagle.Inputs('Trip_PhA', 47, 'in');
+	PhA_52a.Read();
+	// Close_PhA.Watch();
+	// Trip_PhA.Watch();
 	console.log('Phase A initialization completed.');
-
 	// Phase B items.
-	const PhB_52a = new beagle.Outputs('PhB_52a', 60, 'out');
-	const PhB_52b = new beagle.Outputs('PhB_52b', 113, 'out');
-	const Phs_B_Cls = new beagle.Outputs('Phs_B_Cls', 87, 'out');
-	const Phs_B_Opn = new beagle.Outputs('Phs_B_Opn', 110, 'out');
-	const Close_PhB = new beagle.Inputs('Close_PhB', 46, 'in');
-	const Trip_PhB = new beagle.Inputs('Trip_PhB', 27, 'in');
+	let PhB_52a = new beagle.Outputs('PhB_52a', 60, 'out');
+	let PhB_52b = new beagle.Outputs('PhB_52b', 113, 'out');
+	let Phs_B_Cls = new beagle.Outputs('Phs_B_Cls', 87, 'out');
+	let Phs_B_Opn = new beagle.Outputs('Phs_B_Opn', 110, 'out');
+	let Close_PhB = new beagle.Inputs('Close_PhB', 46, 'in');
+	let Trip_PhB = new beagle.Inputs('Trip_PhB', 27, 'in');
 	console.log('Phase B initialization completed.');
+	var map1 = new Map();
+	map1.set(PhB_52a = new beagle.Outputs('PhB_52a', 60, 'out'), PhB_52b = new beagle.Outputs('PhB_52b', 113, 'out'));
 
+	console.log('MAP 1 is here : .... ' + map1.get(PhB_52a.name));
 	// Phase C Items.
-	const PhC_52a = new beagle.Outputs('PhC_52a', 31, 'out');
-	const PhC_52b = new beagle.Outputs('PhC_52b', 111, 'out');
-	const Phs_C_Cls = new beagle.Outputs('Phs_C_Cls', 89, 'out');
-	const Phs_C_Opn = new beagle.Outputs('Phs_C_Opn', 20, 'out');
-	const Close_PhC = new beagle.Inputs('Close_PhC', 65, 'in');
-	const Trip_PhC = new beagle.Inputs('Trip_PhC', 22, 'in');
+	let PhC_52a = new beagle.Outputs('PhC_52a', 31, 'out');
+	let PhC_52b = new beagle.Outputs('PhC_52b', 111, 'out');
+	let Phs_C_Cls = new beagle.Outputs('Phs_C_Cls', 89, 'out');
+	let Phs_C_Opn = new beagle.Outputs('Phs_C_Opn', 20, 'out');
+	let Close_PhC = new beagle.Inputs('Close_PhC', 65, 'in');
+	let Trip_PhC = new beagle.Inputs('Trip_PhC', 22, 'in');
 	console.log('Phase C initialization completed.');
 
 	// Neu/GND items.
-	const Neu_Gnd_Cls = new beagle.Outputs('Neu_Gnd_Cls', 50, 'out');
-	const Neu_Gnd_Opn = new beagle.Outputs('Neu_Gnd_Opn', 117, 'out');
+	let Neu_Gnd_Cls = new beagle.Outputs('Neu_Gnd_Cls', 50, 'out');
+	let Neu_Gnd_Opn = new beagle.Outputs('Neu_Gnd_Opn', 117, 'out');
 	console.log('Neu/GND initialization completed.');
 
 	console.log('name: %s\t\tgpio: %s\tdirection: %s\tedge: %s\tdebounce: %dms',
@@ -150,9 +145,23 @@ function IOInit(breakerModel = '52a, 52b', startPosition = 'close', operationMod
 	console.log('name: %s\t\tgpio: %s\tdirection: %s\tedge: %s\tdebounce: %dms',
 		Trip_PhC.name, Trip_PhC.gpio, Trip_PhC.direction, Trip_PhC.edge, Trip_PhC.debounceTimeout);
 
-	PhA_52a.close();
-	PhB_52a.close();
-	PhC_52a.close();
+	if (startPosition === 'close') {
+		PhA_52a.Close();
+		PhB_52a.Close();
+		PhC_52a.Close();
+	}
+	else if (startPosition === 'trip') {
+		PhA_52a.Trip();
+		PhB_52a.Trip();
+		PhC_52a.Trip();
+	}
+	else {
+		if (process.env.NODE_ENV === 'development') {
+			console.log('no startPosition: ' + startPosition);
+		}
+	}
+	// to ignore gpios.
+	// Close_PhA.Unwatch();
 }
 
 // function library2() {
@@ -213,17 +222,20 @@ function IOInit(breakerModel = '52a, 52b', startPosition = 'close', operationMod
 process.on('SIGINT', function() {
 	console.log('exiting the program...');
 	process.exit();
+	// beagle.Inputs.prototype.UnwatchAll.call();
 });
 
 process.on('uncaughtException', function(err) {
 	console.log(err);
 });
 
+IOInit();
 // entry point.
+// exports.initAll = IOInit();
 //module.exports = init();
-module.exports = {
-	init: IOInit(), // init(),
-	debounceTime: debounceTime
-	// 	// initWithValues: library1WithValues
-	// 	// lib1: library1(breakerModel)
-};
+// module.exports = {
+// 	init: IOInit(), // init(),
+// 	// debounceTime: debounceTime
+// 	// 	// initWithValues: library1WithValues
+// 	// 	// lib1: library1(breakerModel)
+// };

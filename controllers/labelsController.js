@@ -1,8 +1,8 @@
 // var Resources = require('../models/labelsModel');
 // var formData = require('../public/javascripts/main.js').formData;
-const debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
+// const debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
 // const sim = require('../public/javascripts/m76xxIOs').m76xxIOs;
-const sim = require('../public/javascripts/m76xx-io-setup').UserInputs;
+let sim = require('../public/javascripts/m76xxIOSetup');
 // var formData = require('form-data'); // new FormData();
 
 // var formData = new FormData(document.querySelector('#m76xxsimForm'));
@@ -28,7 +28,7 @@ exports.index = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [sim.aOperationDelay, sim.bOperationDelay]
+		defaultValues: [60, 60]
 	});
 };
 
@@ -40,6 +40,24 @@ exports.settings_update_put = function(req, res) {
 	console.log('operationMode: ' + req.query.operationMode);
 	console.log('aOperationDelay: ' + req.query.aOperationDelay);
 	console.log('bOperationDelay: ' + req.query.bOperationDelay);
+	// sim.init(req.query.breakerModel, req.query.startPosition,req.query.operationMode,req.query.aOperationDelay,req.query.bOperationDelay);
+	// // attach these values to user interface in web server.
+	let userValues = {
+		breakerModel: req.query.breakerModel,
+		startPosition: req.query.startPosition,
+		operationMode: req.query.operationMode,
+		aOperationDelay: req.query.aOperationDelay,
+		bOperationDelay: req.query.bOperationDelay
+	};
+
+	new sim.UserInputs(userValues);
+	// new sim({
+	// 	breakerModel: req.query.breakerModel,
+	// 	startPosition: req.query.startPosition,
+	// 	operationMode: req.query.operationMode,
+	// 	aOperationDelay: req.query.aOperationDelay,
+	// 	bOperationDelay: req.query.bOperationDelay
+	// });
 
 	res.render('index', {
 		title: 'Recloser Simulator',
@@ -61,16 +79,5 @@ exports.settings_update_put = function(req, res) {
 		submitButton: 'Update',
 		infoButton: 'Monitor',
 		defaultValues: [req.query.aOperationDelay, req.query.bOperationDelay]
-	});
-
-	// sim.init(req.query.breakerModel, req.query.startPosition,req.query.operationMode,req.query.aOperationDelay,req.query.bOperationDelay);
-	sim({
-		breakerModel: req.query.breakerModel,
-		startPosition: req.query.startPosition,
-		edge: 'both', // 'none', // 'rising', // 'falling', // 
-		operationMode: req.query.operationMode,
-		debounceTime: debounceTime,
-		aOperationDelay: req.query.aOperationDelay,
-		bOperationDelay: req.query.bOperationDelay
 	});
 };
