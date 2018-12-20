@@ -1,20 +1,17 @@
-// var Resources = require('../models/labelsModel');
-// var formData = require('../public/javascripts/main.js').formData;
-// const debounceTime = require('../public/javascripts/m76xxsim').debounceTime;
-// const sim = require('../public/javascripts/m76xxIOs').m76xxIOs;
-let sim = require('../public/javascripts/m76xxIOSetup');
-// var formData = require('form-data'); // new FormData();
-
-// var formData = new FormData(document.querySelector('#m76xxsimForm'));
+// let sim = require('../public/javascripts/m76xxIOSetup');
+let sim = require('../public/javascripts/m76xxsim');
+let setInputs = require('../public/javascripts/m76xxInputs').Inputs;
+let title = 'Recloser Simulator';
+let ver = `${process.env.NODE_ENV} --- v2018.12.17`;
 // INDEX page.
 exports.index = function(req, res) {
 
 	res.render('index', {
-		title: 'Recloser Simulator', // formData.get('title'), //  
+		title: title,
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: process.env.NODE_ENV + ' --- v2018.12.05',
+		ver: ver,
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -38,33 +35,42 @@ exports.settings_update_put = function(req, res) {
 	console.log('breakerModel: ' + req.query.breakerModel);
 	console.log('startPosition: ' + req.query.startPosition);
 	console.log('operationMode: ' + req.query.operationMode);
-	console.log('aOperationDelay: ' + req.query.aOperationDelay);
-	console.log('bOperationDelay: ' + req.query.bOperationDelay);
-	// sim.init(req.query.breakerModel, req.query.startPosition,req.query.operationMode,req.query.aOperationDelay,req.query.bOperationDelay);
-	// // attach these values to user interface in web server.
-	let userValues = {
-		breakerModel: req.query.breakerModel,
-		startPosition: req.query.startPosition,
-		operationMode: req.query.operationMode,
-		aOperationDelay: req.query.aOperationDelay,
-		bOperationDelay: req.query.bOperationDelay
-	};
+	console.log('closeOperationDelay: ' + req.query.closeOperationDelay);
+	console.log('tripOperationDelay: ' + req.query.tripOperationDelay);
 
-	new sim.UserInputs(userValues);
-	// new sim({
+	// attach these values to user interface in web server.
+	// let userValues = {
 	// 	breakerModel: req.query.breakerModel,
 	// 	startPosition: req.query.startPosition,
 	// 	operationMode: req.query.operationMode,
-	// 	aOperationDelay: req.query.aOperationDelay,
-	// 	bOperationDelay: req.query.bOperationDelay
-	// });
+	// 	closeOperationDelay: req.query.closeOperationDelay,
+	// 	tripOperationDelay: req.query.tripOperationDelay
+	// };
+
+	// {
+	// 	name: 'update',
+	// 	gpio: 'update',
+	// 	direction: 'update',
+	// 	breakerModel: req.query.breakerModel,
+	// 	startPosition: req.query.startPosition,
+	// 	operationMode: req.query.operationMode,
+	// 	closeOperationDelay: req.query.closeOperationDelay,
+	// 	tripOperationDelay: req.query.tripOperationDelay
+	// };
+
+	let updateValues = new setInputs('update','update','update',req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay,req.query.tripOperationDelay);
+	
+	updateValues.webUpdate.bind('update','update','update',req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay,req.query.tripOperationDelay);
+	
+	// new sim.IOInit(userValues);
+	// sim.webUpdate(userValues);
 
 	res.render('index', {
-		title: 'Recloser Simulator',
+		title: title,
 		author: 'T. Bircek',
 		description: 'Recloser simulator for Protection relays.',
 		keywords: 'recloser, simulator, protection relays, 52a, 52b, trip, close',
-		ver: process.env.NODE_ENV + ' --- v2018.12.05',
+		ver: ver,
 		inputLabels: ['Input 1:', 'Input 2:'],
 		input1Checked: [true, false, false],
 		input2Checked: [true, false, false, false],
@@ -78,6 +84,6 @@ exports.settings_update_put = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [req.query.aOperationDelay, req.query.bOperationDelay]
+		defaultValues: [req.query.closeOperationDelay, req.query.tripOperationDelay]
 	});
 };

@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var settings_controller = require('../controllers/labelsController');
-// var formData = new FormData();
 
-// test route to make sure everything is working (accessed at GET http://localhost:9000/)
+// test route to make sure everything is working (accessed at GET http://localhost:8081/)
 router.get('/', function(req, res, next) {
 
-	res.json({ message: 'm76xxsim server is up and running. Please proceed to http://hostipaddress:9000/m76xxsim' });
+	res.json({ message: 'm76xxsim server is up and running. Please proceed to http://hostipaddress:8081/m76xxsim' });
 });
 
 router.route('/m76xxsim')
@@ -20,7 +19,6 @@ router.route('/m76xxsim')
 			console.log('GET active');
 			console.log('req.query: ' + req.query.breakerModel);
 
-			// formData.set('title','Recloser Simulator');
 			if (req.query.breakerModel === undefined) {
 				// send index page
 				settings_controller.index(req, res);
