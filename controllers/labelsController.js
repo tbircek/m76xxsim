@@ -1,6 +1,18 @@
-// let sim = require('../public/javascripts/m76xxIOSetup');
+#! /usr/bin/env node
+
+/*
+ * labelsController.js
+ *
+ * Copyright (c) 2018-2019 Turgay Bircek
+ * Version: 1.0.0
+ * Date: 01/08/2019
+ *
+ * Provides interaction between user and the web server.
+ *
+ */
+
+// reference to hardware control and initializations.
 let sim = require('../public/javascripts/m76xxsim');
-let setInputs = require('../public/javascripts/m76xxInputs').Inputs;
 let title = 'Recloser Simulator';
 let ver = `${process.env.NODE_ENV} --- v2018.12.17`;
 // INDEX page.
@@ -39,31 +51,8 @@ exports.settings_update_put = function(req, res) {
 	console.log('tripOperationDelay: ' + req.query.tripOperationDelay);
 
 	// attach these values to user interface in web server.
-	// let userValues = {
-	// 	breakerModel: req.query.breakerModel,
-	// 	startPosition: req.query.startPosition,
-	// 	operationMode: req.query.operationMode,
-	// 	closeOperationDelay: req.query.closeOperationDelay,
-	// 	tripOperationDelay: req.query.tripOperationDelay
-	// };
-
-	// {
-	// 	name: 'update',
-	// 	gpio: 'update',
-	// 	direction: 'update',
-	// 	breakerModel: req.query.breakerModel,
-	// 	startPosition: req.query.startPosition,
-	// 	operationMode: req.query.operationMode,
-	// 	closeOperationDelay: req.query.closeOperationDelay,
-	// 	tripOperationDelay: req.query.tripOperationDelay
-	// };
-
-	let updateValues = new setInputs('update','update','update',req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay,req.query.tripOperationDelay);
-	
-	updateValues.webUpdate.bind('update','update','update',req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay,req.query.tripOperationDelay);
-	
-	// new sim.IOInit(userValues);
-	// sim.webUpdate(userValues);
+	console.log(`pre-check run fine`);
+	sim.IOUserInit.call(this, req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay, req.query.tripOperationDelay);
 
 	res.render('index', {
 		title: title,

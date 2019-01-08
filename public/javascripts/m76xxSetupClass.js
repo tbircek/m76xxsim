@@ -3,9 +3,9 @@
 /*
  * m76xxSetupClass.js
  *
- * Copyright (c) 2018 Turgay Bircek
- * Version: 1.0.0
- * Date: 12/18/2018
+ * Copyright (c) 2018-2019 Turgay Bircek
+ * Version: 1.0.1
+ * Date: 01/08/2019
  *
  * Provides IO functionality of a Recloser.
  *
@@ -15,12 +15,13 @@
 
 // TODO: Add file reading system instead of hard coding pins.
 
-// var async = require('async');
+var async = require('async');
 
 // GPIO control library.
 const Gpio = require('onoff').Gpio;
 
-const edge = 'both';
+
+const edge = 'rising';
 const beagle3_3V = 3.3; // 3.3V power supply
 const VIH = 2.0; // High-level input voltage per datasheet
 const VHYS = 0.44; // max Hysteresis voltage at an input per datasheet
@@ -28,53 +29,21 @@ const logicHighVoltage = VIH + VHYS; // calculated High-level input voltage
 const resistorSize = 2.4e3 * 1.05; // 2.4Kohm
 const capSize = 2.2e-6 * 1.20; // 4.7uF cap
 const secTomsecRate = 1e3; // 1 sec = 1000msec
+// const m7679PulseWidth = 50; // additional X msec delay to software debounce time
 const logicHighRatio = (beagle3_3V - logicHighVoltage) / beagle3_3V;
-const debounceTimeout = Math.ceil(-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2);
+const debounceTimeout = parseInt(Math.ceil(-Math.log(logicHighRatio) * (resistorSize * capSize * secTomsecRate)).toPrecision(2), 10);
 
-const directions = Object.freeze({
-	IN: 'in',
-	OUT: 'out'
-});
-
+// setup super class provides logic to operations.
+// initializes hardware.
 class IOSetup {
 	constructor(name, gpio, direction, breakerModel, startPosition, operationMode, closeOperationDelay, tripOperationDelay) {
 		this.name = name;
 		this.gpio = gpio;
 		this.direction = direction;
-		this.breakerModel = breakerModel;
-		this.startPosition = startPosition;
-		this.operationMode = operationMode;
-		this.closeOperationDelay = closeOperationDelay;
-		this.tripOperationDelay = tripOperationDelay;
-		this.edge = edge;
-		this.debounceTimeout = debounceTimeout;
 	}
-
-	// webUpdate(name, gpio, direction, breakerModel, startPosition, operationMode, closeOperationDelay, tripOperationDelay) {
-	// 	this.name = name;
-	// 	this.gpio = gpio;
-	// 	this.direction = direction,
-	// 	this.breakerModel = breakerModel;
-	// 	this.startPosition = startPosition;
-	// 	this.operationMode = operationMode;
-	// 	this.closeOperationDelay = closeOperationDelay;
-	// 	this.tripOperationDelay = tripOperationDelay;
-	// 	if (process.env.NODE_ENV === 'development') {
-	// 		console.log(`\t\t User updated values are available.`);
-	// 	}
-	// 	// this.init();
-	// 	// this.watchOutput();
-	// }
 
 	// handles initalization of every GPIO.
 	init() {
-
-		// let name = this.name;
-		// let startPosition = this.startPosition;
-		// let breakerModel = this.breakerModel;
-		// let operationMode = this.operationMode;
-		// let closeOperationDelay = this.closeOperationDelay;
-		// let tripOperationDelay = this.tripOperationDelay;
 
 		if (Gpio.accessible) {
 			if (this.direction === 'out') {
@@ -84,10 +53,8 @@ class IOSetup {
 					}
 
 					// store in outputs set.
-					this.outputs.set(this.name, new Gpio(this.gpio, this.direction, {
-						label: this.name
-					}));
-
+					this.outputs.set(this.name, new Gpio(this.gpio, this.direction)); 
+					
 					if (process.env.NODE_ENV === 'development') {
 						console.log(`\t\t Counting mapped outputs: ${this.outputs.size} and value: ${this.outputs.get(this.name)._gpio}.`);
 					}
@@ -99,7 +66,7 @@ class IOSetup {
 					// init here.
 					// start Position activated.
 					if (process.env.NODE_ENV === 'development') {
-						console.log(`\t\t this.direction === 'out') { ELSE breakerModel: ${this.breakerModel} and startPosition: ${this.startPosition}.`);
+						console.log(`\tWe are running --- this.direction === 'out') { ELSE breakerModel: ${this.m76xx.breakerModel} and startPosition: ${this.m76xx.startPosition}.`);
 					}
 					this.watchOutputs.call(this);
 				}
@@ -109,28 +76,26 @@ class IOSetup {
 					if (process.env.NODE_ENV === 'development') {
 						console.log('this INPUT is not defined yet');
 					}
-					this.inputs.set(this.name, new Gpio(this.gpio, this.direction, this.edge, {
-						debounceTimeout: this.debounceTimeout //,
-						// label: this.name
+					this.inputs.set(this.name, new Gpio(this.gpio, this.direction, edge, {
+						debounceTimeout: debounceTimeout 
 					}));
-
+					
 					if (process.env.NODE_ENV === 'development') {
-						console.log(`\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)}.`);
+						console.log(`\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)} debounceTimeout: ${debounceTimeout} msec.`);
 					}
-					// this.watchInputs();
-
-					// let inputToWatch = this.inputs.get(this.name);
+					
+					let myThis = this;
+					
 					this.inputs.get(this.name).watch((err, value) => {
-					// inputToWatch.watch((err, value) => {
+						
 						if (err) {
 							throw err;
 						}
-						
-						this.speak();
-						this.outputs.forEach(this.selectOutput, this);
-					
-						// this.watchOutputs.call(this);
-						
+
+						console.time('start');
+						async.parallel(this.speak());
+						async.parallel(this.outputs.forEach(this.selectOutput, myThis));
+
 					});
 				}
 			}
@@ -159,12 +124,13 @@ class IOSetup {
 	watchOutputs() {
 		if (Gpio.accessible) {
 			if (process.env.NODE_ENV === 'development') {
+				console.log(`Setup Class.watchOutputs() is running:`);
 				console.log(`name: ${this.name} is running.`);
-				console.log(`startPosition: ${this.startPosition} is position.`);
-				console.log(`breakerModel: ${this.breakerModel} is model.`);
-				console.log(`operationMode: ${this.operationMode} is mode.`);
-				console.log(`closeOperationDelay: ${this.closeOperationDelay} is close delay.`);
-				console.log(`tripOperationDelay: ${this.tripOperationDelay} is trip delay.`);
+				console.log(`startPosition: ${this.m76xx.startPosition} is position.`);
+				console.log(`breakerModel: ${this.m76xx.breakerModel} is model.`);
+				console.log(`operationMode: ${this.m76xx.operationMode} is mode.`);
+				console.log(`closeOperationDelay: ${this.m76xx.closeOperationDelay} is close delay.`);
+				console.log(`tripOperationDelay: ${this.m76xx.tripOperationDelay} is trip delay.`);
 			}
 
 			this.outputs.forEach(this.selectOutput, this);
@@ -214,95 +180,66 @@ class IOSetup {
 	// prints some info about Gpios.
 	speak() {
 		if (process.env.NODE_ENV === 'development') {
-			console.log(`${IOSetup.name} CLASS TALKS:`);
-			console.log(`${this.name} \tis going to sleep!`);
-			console.log(`${this.gpio} \t\tmakes a noise.`);
-			console.log(`${this.direction} \t\tis eating!`);
-			if (this.direction === directions.IN) {
-				console.log(`${this.edge} \t\twhere growls!`);
-				console.log(`${this.debounceTimeout}msec \tis break time.`);
-			}
-			console.log(`${this.breakerModel} \tis waking up!`);
-			console.log(`${this.startPosition} \t\tis pounding its chest!`);
-			console.log(`${this.operationMode} \tis climbing trees!`);
-			console.log(`${this.closeOperationDelay} \t\tlooks at an example.`);
-			console.log(`${this.tripOperationDelay} \t\tkeywords are used.`);
+			console.log(`${IOSetup.name} CLASS TALKS: Input changed detected: \t\t${this.name}`);
 		}
 	}
 
 	selectOutput(value, key, map) {
-		// console.log(IOSetup.prototype.name);
-		let outputName; // = this.name.split('_')[0];
+		let outputName;
 		let opDirection = this.name.split('_')[1];
-		let breakerModel = this.breakerModel;
 
 		if (opDirection === 'Close' || opDirection === 'Trip') {
 			outputName = this.name.split('_')[0];
 		}
 		else {
 			outputName = key.toString();
-			opDirection = this.startPosition;
+			opDirection = this.m76xx.startPosition;
 		}
-
-		// to show passing every value.
+		// to show passing every key.
 		if (process.env.NODE_ENV === 'development') {
-			console.log(`m[${key}] = ${value._gpio} command sent. \nMy original name: ${this.name}\t\tmy processed name: ${outputName} \nBreaker model: ${breakerModel} and requested operation was ${opDirection}`);
-			console.log(`>-------------------------------------<`);
+			console.time(key.toString());
 		}
 
-		if ((this.breakerModel.includes('52a only') || this.breakerModel === '52a, 52b') && (key.toString().endsWith('52a'))) {
+		if ((this.m76xx.breakerModel.includes('52a only') || this.m76xx.breakerModel === '52a, 52b') && (key.toString().endsWith('52a'))) {
 			if (key.toString().startsWith(outputName)) {
 				if (opDirection === 'Close') {
-					this.close(key, this);
+					async.parallel(this.close(key, this));
 				}
 				else if (opDirection === 'Trip') {
-					this.trip(key, this);
-				}
-
-				if (process.env.NODE_ENV === 'development') {
-					console.log(`m[${key}] = ${value._gpio} command sent. \tBreaker model: ${this.breakerModel} and requested operation was ${opDirection}`);
-					console.log(`>-------------------------------------<`);
+					async.parallel(this.trip(key, this));
 				}
 			}
 		}
-		else if ((this.breakerModel.includes('52b only') || this.breakerModel === '52a, 52b') && (key.toString().endsWith('52b'))) {
+		else if ((this.m76xx.breakerModel.includes('52b only') || this.m76xx.breakerModel === '52a, 52b') && (key.toString().endsWith('52b'))) {
 			if (key.toString().startsWith(outputName)) {
 				if (opDirection === 'Close') {
-					this.trip(key, this);
+					async.parallel(this.trip(key, this));
 				}
 				else if (opDirection === 'Trip') {
-					this.close(key, this);
-				}
-
-				if (process.env.NODE_ENV === 'development') {
-					console.log(`m[${key}] = ${value._gpio} command sent. \tBreaker model: ${this.breakerModel} and requested operation was ${opDirection}`);
-					console.log(`>-------------------------------------<`);
+					async.parallel(this.close(key, this));
 				}
 			}
 		}
 		else {
-			if ((key.toString().startsWith(outputName) || key.toString().startsWith('Neu_Gnd')) && key.toString().endsWith('Cls')) {
+			if ((key.toString().startsWith(outputName) || key.toString().startsWith('Neu_Gnd') || this.m76xx.operationMode === '3trip 3lockout') && key.toString().endsWith('Opn')) {
 				if (opDirection === 'Close') {
-					this.close(key, this);
+					async.parallel(this.trip(key, this));
 				}
 				else if (opDirection === 'Trip') {
-					this.trip(key, this);
-				}
-				if (process.env.NODE_ENV === 'development') {
-					console.log(`m[${key}] = ${value._gpio} command sent. \tBreaker model: ${this.breakerModel} and requested operation was ${opDirection}`);
-					console.log(`>-------------------------------------<`);
+					async.parallel(this.close(key, this));
 				}
 			}
-			else if ((key.toString().startsWith(outputName) || key.toString().startsWith('Neu_Gnd')) && key.toString().endsWith('Opn')) {
+			else if ((key.toString().startsWith(outputName) || key.toString().startsWith('Neu_Gnd') || this.m76xx.operationMode === '3trip 3lockout') && key.toString().endsWith('Cls')) {
 				if (opDirection === 'Close') {
-					this.trip(key, this);
+					async.parallel(this.close(key, this));
 				}
 				else if (opDirection === 'Trip') {
-					this.close(key, this);
+					async.parallel(this.trip(key, this));
 				}
+			}
+			else {
 				if (process.env.NODE_ENV === 'development') {
-					console.log(`m[${key}] = ${value._gpio} command sent. \tBreaker model: ${this.breakerModel} and requested operation was ${opDirection}`);
-					console.log(`>-------------------------------------<`);
+					console.timeEnd(key.toString());
 				}
 			}
 		}

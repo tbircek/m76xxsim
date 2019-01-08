@@ -3,9 +3,9 @@
 /*
  * m76xxInputs.js
  *
- * Copyright (c) 2018 Turgay Bircek
- * Version: 1.0.0
- * Date: 12/18/2018
+ * Copyright (c) 2018-2019 Turgay Bircek
+ * Version: 1.0.1
+ * Date: 01/08/2019
  *
  * Provides input operations for M76xx Simulator program.
  *
@@ -13,112 +13,130 @@
  *
  */
 
+// super class reference.
 let IOSetup = require('./m76xxSetupClass').IOSetup;
-// let directions = require('./m76xxsim').directions;
-// let Outputs = require('./m76xxOutputs').Outputs;
-
 // GPIO control library.
 const Gpio = require('onoff').Gpio;
 
-// const directions = Object.freeze({
-// 	IN: 'in',
-// 	OUT: 'out'
-// });
-
+// arrays to hold input and output gpios.
 let outputs = new Map();
 let inputs = new Map();
-let myBreakerModel;
 
-// Logic One;
-const Logic1 = Gpio.HIGH;
+// default M76xx operation parameters.
+let m76xx = {
+	model: '52a, 52b',
+	position: 'Close',
+	mode: '3trip 3lockout',
+	closeDelay: 0,
+	tripDelay: 0,
+	get breakerModel() {
+		return this.model;
+	},
+	get startPosition() {
+		return this.position;
+	},
+	get operationMode() {
+		return this.mode;
+	},
+	get closeOperationDelay() {
+		return this.closeDelay;
+	},
+	get tripOperationDelay() {
+		return this.tripDelay;
+	},
+	set breakerModel(val) {
+		this.model = val;
+	},
+	set startPosition(val) {
+		this.position = val;
+	},
+	set operationMode(val) {
+		this.mode = val;
+	},
+	set closeOperationDelay(val) {
+		this.closeDelay = val;
+	},
+	set tripOperationDelay(val) {
+		this.tripDelay = val;
+	}
+};
 
-// Logic zero;
-const Logic0 = Gpio.LOW;
+const TRIP = Gpio.LOW;
+
+const CLOSE = Gpio.HIGH;
 
 class Inputs extends IOSetup {
 	constructor(name, gpio, direction, breakerModel, startPosition, operationMode, closeOperationDelay, tripOperationDelay) {
 		super(name, gpio, direction, breakerModel, startPosition, operationMode, closeOperationDelay, tripOperationDelay);
 		this.outputs = outputs;
 		this.inputs = inputs;
-		this.Logic0 = Logic0;
-		this.Logic1 = Logic1;
+		this.m76xx = m76xx;
+
+		if (breakerModel !== undefined) {
+			m76xx.breakerModel = breakerModel;
+		}
+		if (startPosition !== undefined) {
+			m76xx.startPosition = startPosition;
+		}
+		if (operationMode !== undefined) {
+			m76xx.operationMode = operationMode;
+		}
+		if (closeOperationDelay !== undefined) {
+			m76xx.closeOperationDelay = closeOperationDelay;
+		}
+		if (tripOperationDelay !== undefined) {
+			m76xx.tripOperationDelay = tripOperationDelay;
+		}
 	}
 
-	webUpdate(name, gpio, direction, breakerModel, startPosition, operationMode, closeOperationDelay, tripOperationDelay) {
-		super.name = name;
-		super.gpio = gpio;
-		super.direction = direction,
-		super.breakerModel = breakerModel;
-		super.startPosition = startPosition;
-		super.operationMode = operationMode;
-		super.closeOperationDelay = closeOperationDelay;
-		super.tripOperationDelay = tripOperationDelay;
-		if (process.env.NODE_ENV === 'development') {
-			console.log(`\t\t User updated values are available.`);
-		}
-		super.init(this);
-		// this.watchOutputs(this);
-		// this.outputs.forEach(this.selectOutput, this);
-		super.speak();
+	getBreakerModel() {
+		return m76xx.breakerModel;
+	}
+
+	getStartPosition() {
+		return m76xx.startPosition;
+	}
+
+	getOperationMode() {
+		return m76xx.operationMode;
+	}
+
+	getCloseOperationDelay() {
+		return m76xx.closeOperationDelay;
+	}
+
+	getTripOperationDelay() {
+		return m76xx.tripOperationDelay;
 	}
 
 	close(outputName) {
-		if (process.env.NODE_ENV === 'development') {
-			console.log(`Inputs.close():\t${this.name} - GPIO${this.gpio} is closed... --- breakerModel: ${this.breakerModel}`);
-		}
-
 		// this refers to setTimeout which don't have this.name
-		// let outputName = this.name;
 		setTimeout(function() {
 
-			outputs.get(outputName).writeSync(Logic1);
-		}, this.closeOperationDelay);
+			outputs.get(outputName).writeSync(CLOSE);
+			// outputs.get(outputName).write(CLOSE);
+			if (process.env.NODE_ENV === 'development') {
+				console.log(`Inputs.close():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is closed...`);
+				console.timeEnd(outputName.toString());
+				// console.timeLog('close');
+			}
+		}, m76xx.closeOperationDelay);
 	}
 
 	trip(outputName) {
-		if (process.env.NODE_ENV === 'development') {
-			console.log(`Inputs.trip():\t${this.name} - GPIO${this.gpio} is tripped... --- breakerModel: ${this.breakerModel}`);
-		}
 
 		// this refers to setTimeout which don't have this.name
-		// let outputName = this.name;
 		setTimeout(function() {
 
-			outputs.get(outputName).writeSync(Logic0);
-		}, this.tripOperationDelay);
+			outputs.get(outputName).writeSync(TRIP);
+			// outputs.get(outputName).write(TRIP);
+			if (process.env.NODE_ENV === 'development') {
+				console.log(`Inputs.trip():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is tripped...`);
+				console.timeEnd(outputName.toString());
+				// console.timeLog('trip');
+			}
+		}, m76xx.tripOperationDelay);
 	}
-
-	// // Watch for hardware interrupts on the GPIO. 
-	// // The edge argument that was passed to the constructor determines which hardware interrupts to watch for.
-	// watchInputs() {
-	// 	super.speak();
-	// 	if (Gpio.accessible) {
-	// 		if (this.direction === 'in') {
-	// 			inputs.get(this.name).watch((err, value) => {
-	// 				if (err) {
-	// 					throw err;
-	// 				}
-
-	// 				this.outputs.forEach(this.selectOutput, this);
-	// 			});
-	// 		}
-	// 		// else if (this.direction === 'out') {
-
-	// 		// 	if (process.env.NODE_ENV === 'development') {
-	// 		// 		console.log(`watchGpios detected an Output: ${this.name} is not defined.`);
-	// 		// 	}
-
-	// 		// 	// super.watchOutputs();
-
-	// 		// 	this.outputs.forEach(this.selectOutput, this);
-	// 		// }
-	// 	}
-	// 	else {
-	// 		writeSync: (value) => {
-	// 			console.log('virtual led now uses value: ' + value);
-	// 		};
-	// 	}
-	// }
 }
 
 // provides methods to control and initialization of the Inputs.
