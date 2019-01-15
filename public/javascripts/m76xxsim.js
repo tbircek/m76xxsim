@@ -95,18 +95,15 @@ function IOInit() {
 
 	PhA_Trip.init();
 	PhA_Close.init();
-	if (process.env.NODE_ENV === 'development') {
-		
-	}
-	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
-		PhB_Trip.init();
-		PhB_Close.init();
-		PhC_Trip.init();
-		PhC_Close.init();
-	}
+	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+	PhB_Trip.init();
+	PhB_Close.init();
+	PhC_Trip.init();
+	PhC_Close.init();
+	// }
 
-if (process.env.NODE_ENV === 'development') {
-	console.log(`we are the initiators. AFTER\n\t    BreakerModel: ${PhA_Trip.getBreakerModel()}\tStartPosition:     ${PhA_Trip.getStartPosition()}\tOperation mode:    ${PhA_Trip.getOperationMode()}\tCloseOperationDelay:     ${PhA_Trip.getCloseOperationDelay()}\tTripOperationDelay:    ${PhA_Trip.getTripOperationDelay()}`);
+	if (process.env.NODE_ENV === 'development') {
+		console.log(`we are the initiators. AFTER\n\t    BreakerModel: ${PhA_Trip.getBreakerModel()}\tStartPosition:     ${PhA_Trip.getStartPosition()}\tOperation mode:    ${PhA_Trip.getOperationMode()}\tCloseOperationDelay:     ${PhA_Trip.getCloseOperationDelay()}\tTripOperationDelay:    ${PhA_Trip.getTripOperationDelay()}`);
 	}
 	console.log('Input initialization completed.');
 
@@ -163,12 +160,12 @@ if (process.env.NODE_ENV === 'development') {
 
 	PhA_52a.init();
 	PhA_52b.init();
-	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
-		PhB_52a.init();
-		PhB_52b.init();
-		PhC_52a.init();
-		PhC_52b.init();
-	}
+	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+	PhB_52a.init();
+	PhB_52b.init();
+	PhC_52a.init();
+	PhC_52b.init();
+	// }
 	console.log('Output initialization completed.');
 }
 
@@ -189,16 +186,16 @@ function unexportAll() {
 	Neu_Gnd_Cls.unexport();
 	Neu_Gnd_Opn.unexport();
 
-	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
-		PhB_Close.unexport();
-		PhB_Trip.unexport();
-		PhB_52a.unexport();
-		PhB_52b.unexport();
-		PhC_Close.unexport();
-		PhC_Trip.unexport();
-		PhC_52a.unexport();
-		PhC_52b.unexport();
-	}
+	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+	PhB_Close.unexport();
+	PhB_Trip.unexport();
+	PhB_52a.unexport();
+	PhB_52b.unexport();
+	PhC_Close.unexport();
+	PhC_Trip.unexport();
+	PhC_52a.unexport();
+	PhC_52b.unexport();
+	// }
 
 	console.log(`operationMode ... ${PhA_Trip.getOperationMode()}`);
 }
@@ -225,7 +222,7 @@ function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, user
 	if (process.env.NODE_ENV === 'development') {
 		console.log(`we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
 	}
-	
+
 	// initialize every gpio ports again.
 	IOInit.call(this);
 }

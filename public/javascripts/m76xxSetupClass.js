@@ -27,7 +27,7 @@ const VIH = 2.0; // High-level input voltage per datasheet
 const VHYS = 0.44; // max Hysteresis voltage at an input per datasheet
 const logicHighVoltage = VIH + VHYS; // calculated High-level input voltage
 const resistorSize = 2.4e3 * 1.05; // 2.4Kohm
-const capSize = 2.2e-6 * 1.20; // 4.7uF cap
+const capSize = 2.2e-6 * 1.25; // 2.2uF cap
 const secTomsecRate = 1e3; // 1 sec = 1000msec
 // const m7679PulseWidth = 50; // additional X msec delay to software debounce time
 const logicHighRatio = (beagle3_3V - logicHighVoltage) / beagle3_3V;
@@ -47,56 +47,62 @@ class IOSetup {
 
 		if (Gpio.accessible) {
 			if (this.direction === 'out') {
-				if (!this.outputs.has(this.name)) {
-					if (process.env.NODE_ENV === 'development') {
-						console.log('this OUTPUT is not defined yet');
-					}
+				if (this.canOperate()) {
+					if (!this.outputs.has(this.name)) {
+						if (process.env.NODE_ENV === 'development') {
+							console.log('this OUTPUT is not defined yet');
+						}
 
-					// store in outputs set.
-					this.outputs.set(this.name, new Gpio(this.gpio, this.direction)); 
-					
-					if (process.env.NODE_ENV === 'development') {
-						console.log(`\t\t Counting mapped outputs: ${this.outputs.size} and value: ${this.outputs.get(this.name)._gpio}.`);
-					}
+						// store in outputs set.
+						this.outputs.set(this.name, new Gpio(this.gpio, this.direction));
 
-					// start Position activated.
-					this.watchOutputs.call(this);
-				}
-				else {
-					// init here.
-					// start Position activated.
-					if (process.env.NODE_ENV === 'development') {
-						console.log(`\tWe are running --- this.direction === 'out') { ELSE breakerModel: ${this.m76xx.breakerModel} and startPosition: ${this.m76xx.startPosition}.`);
+						if (process.env.NODE_ENV === 'development') {
+							console.log(`\t\t Counting mapped outputs: ${this.outputs.size} and value: ${this.outputs.get(this.name)._gpio}.`);
+						}
+
+						// start Position activated.
+						this.watchOutputs.call(this);
 					}
-					this.watchOutputs.call(this);
+					else {
+						// init here.
+						// start Position activated.
+						if (process.env.NODE_ENV === 'development') {
+							console.log(`\tWe are running --- this.direction === 'out') { ELSE breakerModel: ${this.m76xx.breakerModel} and startPosition: ${this.m76xx.startPosition}.`);
+						}
+						if (this.canOperate()) {
+							this.watchOutputs.call(this);
+						}
+					}
 				}
 			}
 			else if (this.direction === 'in') {
-				if (!this.inputs.has(this.name)) {
-					if (process.env.NODE_ENV === 'development') {
-						console.log('this INPUT is not defined yet');
-					}
-					this.inputs.set(this.name, new Gpio(this.gpio, this.direction, edge, {
-						debounceTimeout: debounceTimeout 
-					}));
-					
-					if (process.env.NODE_ENV === 'development') {
-						console.log(`\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)} debounceTimeout: ${debounceTimeout} msec.`);
-					}
-					
-					let myThis = this;
-					
-					this.inputs.get(this.name).watch((err, value) => {
-						
-						if (err) {
-							throw err;
+				if (this.canOperate()) {
+					if (!this.inputs.has(this.name)) {
+						if (process.env.NODE_ENV === 'development') {
+							console.log('this INPUT is not defined yet');
+						}
+						this.inputs.set(this.name, new Gpio(this.gpio, this.direction, edge, {
+							debounceTimeout: debounceTimeout
+						}));
+
+						if (process.env.NODE_ENV === 'development') {
+							console.log(`\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)} debounceTimeout: ${debounceTimeout} msec.`);
 						}
 
-						console.time('start');
-						async.parallel(this.speak());
-						async.parallel(this.outputs.forEach(this.selectOutput, myThis));
+						let myThis = this;
 
-					});
+						this.inputs.get(this.name).watch((err, value) => {
+
+							if (err) {
+								throw err;
+							}
+
+							console.time('start');
+							async.parallel(this.speak());
+							async.parallel(this.outputs.forEach(this.selectOutput, myThis));
+
+						});
+					}
 				}
 			}
 			else if (this.direction === 'update') {
@@ -133,12 +139,46 @@ class IOSetup {
 				console.log(`tripOperationDelay: ${this.m76xx.tripOperationDelay} is trip delay.`);
 			}
 
+			// if (this.canOperate()) {
+			// 	if (process.env.NODE_ENV === 'development') {
+			// 		console.log(`\t\tSetup Class.watchOutputs() is running:`);
+			// 		console.log(`\t\tname: ${this.name} is added.`);
+			// 	}
 			this.outputs.forEach(this.selectOutput, this);
+			// }
+
 		}
 		else {
 			writeSync: (value) => {
 				console.log('virtual led now uses value: ' + value);
 			};
+		}
+	}
+
+	// provide decision to initialize gpio based on operationMode
+	canOperate() {
+		/*
+		 * Following rules apply:
+		 * 1 - All _Cls and All _Opn current interrupters initialize always.
+		 * 1 - OperationMode == '3trip 3lockout'
+		 *			Only following gpios should be operational:
+		 *				a - PhA_52a and PhA_52b
+		 *				b - PhA_Trip and PhA_Close		 *
+		 */
+		if (this.m76xx.operationMode === '3trip 3lockout') {
+
+			if (this.name.toString().endsWith('_Opn') || this.name.toString().endsWith('_Cls') || this.name.toString().startsWith('PhA_')) {
+
+				return true;
+			}
+			else {
+
+				return false;
+			}
+		}
+		else {
+			// TODO: verify this condition accurate for rest of the operationMode-s
+			return true;
 		}
 	}
 
