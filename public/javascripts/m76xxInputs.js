@@ -111,6 +111,7 @@ class Inputs extends IOSetup {
 
 	close(outputName) {
 		// this refers to setTimeout which don't have this.name
+		
 		setTimeout(function() {
 
 			outputs.get(outputName).writeSync(CLOSE);

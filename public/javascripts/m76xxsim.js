@@ -70,7 +70,7 @@ let tripOperationDelay;
 
 // interface to lcd.
 // Future use.
-// const lcd = require('./lcd');
+const lcd = require('./lcd');
 
 function IOInit() {
 
@@ -167,6 +167,7 @@ function IOInit() {
 	PhC_52b.init();
 	// }
 	console.log('Output initialization completed.');
+	// lcd();
 }
 
 // once ran no possiblity of using same gpio ports.
@@ -186,23 +187,25 @@ function unexportAll() {
 	Neu_Gnd_Cls.unexport();
 	Neu_Gnd_Opn.unexport();
 
-	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
-	PhB_Close.unexport();
-	PhB_Trip.unexport();
-	PhB_52a.unexport();
-	PhB_52b.unexport();
-	PhC_Close.unexport();
-	PhC_Trip.unexport();
-	PhC_52a.unexport();
-	PhC_52b.unexport();
-	// }
+	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+		PhB_Close.unexport();
+		PhB_Trip.unexport();
+		PhB_52a.unexport();
+		PhB_52b.unexport();
+		PhC_Close.unexport();
+		PhC_Trip.unexport();
+		PhC_52a.unexport();
+		PhC_52b.unexport();
+	}
 
 	console.log(`operationMode ... ${PhA_Trip.getOperationMode()}`);
 }
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
+	// lcd.lcdPrint(`terminating...`);
 	unexportAll();
+	// lcd.close();
 	console.log(`exiting the program...`);
 	process.exit();
 });
