@@ -1,6 +1,9 @@
 {
   "name": "m76xxsim",
   "version": "1.0.0",
+  "engine": {
+    "node": "v6.14.4"
+  },
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
@@ -22,7 +25,9 @@
     "morgan": "^1.9.1",
     "onoff": "^3.2.2",
     "pug": "^2.0.3",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.1.0",
+    "winston-timer": "^0.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"

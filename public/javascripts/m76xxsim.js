@@ -2,8 +2,8 @@
 
 /* m76xxsim.js
  * Author: Turgay Bircek
- * Version: 1.0.2
- * Date: 01/08/2019
+ * Version: 1.0.3
+ * Date: 01/23/2019
  * 
  * Provides main entry for M76xx Simulator program
  *
@@ -28,6 +28,9 @@
  *                        Trip
  * 
  */
+
+// the logger.
+var winston = require('../../winston');
 
 // interface to inputs/oututs of beaglebone black.
 let setInputs = require('./m76xxInputs').Inputs;
@@ -69,11 +72,14 @@ let tripOperationDelay;
 // const mdbus = require('./modbus-comm');
 
 // interface to lcd.
-// Future use.
 const lcd = require('./lcd');
 
 function IOInit() {
 
+	// update the log.
+	winston.log('info', 'program inits...');
+
+	lcd.clear;
 	/*********************************
 	 * 
 	 * Input items.
@@ -95,17 +101,12 @@ function IOInit() {
 
 	PhA_Trip.init();
 	PhA_Close.init();
-	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
 	PhB_Trip.init();
 	PhB_Close.init();
 	PhC_Trip.init();
 	PhC_Close.init();
-	// }
-
-	if (process.env.NODE_ENV === 'development') {
-		console.log(`we are the initiators. AFTER\n\t    BreakerModel: ${PhA_Trip.getBreakerModel()}\tStartPosition:     ${PhA_Trip.getStartPosition()}\tOperation mode:    ${PhA_Trip.getOperationMode()}\tCloseOperationDelay:     ${PhA_Trip.getCloseOperationDelay()}\tTripOperationDelay:    ${PhA_Trip.getTripOperationDelay()}`);
-	}
-	console.log('Input initialization completed.');
+	
+	winston.log('info', 'Input initialization completed.');
 
 	/*********************************
 	 * 
@@ -137,7 +138,7 @@ function IOInit() {
 	PhC_Cls.init();
 	Neu_Gnd_Opn.init();
 	Neu_Gnd_Cls.init();
-	console.log('Current interrupter initialization completed.');
+	winston.log('info', 'Current interrupter initialization completed.');
 
 	/*********************************
 	 * 
@@ -166,7 +167,7 @@ function IOInit() {
 	PhC_52a.init();
 	PhC_52b.init();
 	// }
-	console.log('Output initialization completed.');
+	winston.log('info', 'Output initialization completed.');
 	// lcd();
 }
 
@@ -198,20 +199,19 @@ function unexportAll() {
 		PhC_52b.unexport();
 	}
 
-	console.log(`operationMode ... ${PhA_Trip.getOperationMode()}`);
+	winston.log('info', `operationMode ... ${PhA_Trip.getOperationMode()}`);
 }
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
-	// lcd.lcdPrint(`terminating...`);
+	winston.log('info', `exiting the program...`);
 	unexportAll();
 	// lcd.close();
-	console.log(`exiting the program...`);
 	process.exit();
 });
 
 process.on('uncaughtException', function(err) {
-	console.log(err);
+	winston.log('error', err);
 });
 
 // call by the user interactions in webpage.
@@ -222,9 +222,9 @@ function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, user
 	closeOperationDelay = userCloseOperationDelay;
 	tripOperationDelay = userTripOperationDelay;
 
-	if (process.env.NODE_ENV === 'development') {
-		console.log(`we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
-	}
+	// if (process.env.NODE_ENV === 'development') {
+	winston.log('info', `we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
+	// }
 
 	// initialize every gpio ports again.
 	IOInit.call(this);

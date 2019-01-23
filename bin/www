@@ -5,9 +5,9 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('m76xxsim:server');
+// var debug = require('debug')('m76xxsim:server');
 var http = require('http');
-//var bbb = require('../public/javascripts/m76xxsim');
+var winston = require('../winston');
 
 /**
  * Get port from environment and store in Express.
@@ -34,21 +34,21 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
-  var port = parseInt(val, 10);
+// function normalizePort(val) {
+//   var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+//   if (isNaN(port)) {
+//     // named pipe
+//     return val;
+//   }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+//   if (port >= 0) {
+//     // port number
+//     return port;
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
 /**
  * Event listener for HTTP server "error" event.
@@ -66,11 +66,13 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      // console.error(bind + ' requires elevated privileges');
+      winston.log('error', `${bind} requires elevated privileges.`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      // console.error(bind + ' is already in use');
+      winston.log('error', `${bind} is already in use.`);
       process.exit(1);
       break;
     default:
@@ -83,11 +85,13 @@ function onError(error) {
  */
 
 function onListening() {
-  // bbb.init();
+  
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log('The server running at http://localhost:' + addr.port);
+  // debug('Listening on ' + bind);
+  // console.log('The server running at http://localhost:' + addr.port);
+  winston.log('info', `Listening on ${bind}`);
+  winston.log('info', `The server running at http://localhost:${addr.port}`);
 }

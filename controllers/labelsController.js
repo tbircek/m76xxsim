@@ -43,15 +43,7 @@ exports.index = function(req, res) {
 
 exports.settings_update_put = function(req, res) {
 
-	console.log('PUT_update active');
-	console.log('breakerModel: ' + req.query.breakerModel);
-	console.log('startPosition: ' + req.query.startPosition);
-	console.log('operationMode: ' + req.query.operationMode);
-	console.log('closeOperationDelay: ' + req.query.closeOperationDelay);
-	console.log('tripOperationDelay: ' + req.query.tripOperationDelay);
-
-	// attach these values to user interface in web server.
-	console.log(`pre-check run fine`);
+	// initialize beaglebone gpios with the user specified values.
 	sim.IOUserInit.call(this, req.query.breakerModel, req.query.startPosition, req.query.operationMode, req.query.closeOperationDelay, req.query.tripOperationDelay);
 
 	res.render('index', {

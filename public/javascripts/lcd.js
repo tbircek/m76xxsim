@@ -1,11 +1,16 @@
+#! /usr/bin/env node
+
 /* lcd.js
  * Author: Turgay Bircek
- * Version: 1.0.0
- * Date: 3/28/2018
+ * Version: 1.0.1
+ * Date: 01/23/2019
  * 
  * Provides interaction to LCD.
  *
  */
+
+// the logger.
+var winston = require('../../winston');
 
 // provides miscellaneous function to the program.
 var misc = require('./misc');
@@ -74,14 +79,16 @@ lcd.on('ready', function() {
   lcdPrint(misc.defaultMessage(), 0, 0);
 
   // update console.
-  console.log('lcd initialized...');
+  // console.log('lcd initialized...');
+  winston.log('info', 'lcd initialized...');
 });
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', () => {
   lcd.clear();
   lcd.close();
-  console.log(`deleting LCD resources...`);
+  // console.log(`deleting LCD resources...`);
+  winston.log('info', 'deleting LCD resources...');
 });
 
 // export lcdPrint function.

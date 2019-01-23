@@ -13,6 +13,10 @@
  *
  */
 
+// the logger.
+var winston = require('../../winston');
+require('winston-timer')(winston);
+
 // super class reference.
 let IOSetup = require('./m76xxSetupClass').IOSetup;
 // GPIO control library.
@@ -111,31 +115,40 @@ class Inputs extends IOSetup {
 
 	close(outputName) {
 		// this refers to setTimeout which don't have this.name
-		
+		// winston.start_log(outputName.toString(), 'info');
 		setTimeout(function() {
 
 			outputs.get(outputName).writeSync(CLOSE);
 			// outputs.get(outputName).write(CLOSE);
-			if (process.env.NODE_ENV === 'development') {
-				console.log(`Inputs.close():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is closed...`);
-				console.timeEnd(outputName.toString());
-				// console.timeLog('close');
-			}
+
+			winston.log('info', `\t${outputName.toString()} operation completed.`);
+			// winston.stop_log(outputName.toString(), 'info');
+
+			// if (process.env.NODE_ENV === 'development') {
+			// 	console.log(`Inputs.close():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is closed...`);
+			// 	// console.timeEnd(outputName.toString());
+			// 	// console.timeLog('close');
+			// }
 		}, m76xx.closeOperationDelay);
 	}
 
 	trip(outputName) {
 
 		// this refers to setTimeout which don't have this.name
+		// winston.start_log(outputName.toString(), 'info');
 		setTimeout(function() {
 
 			outputs.get(outputName).writeSync(TRIP);
 			// outputs.get(outputName).write(TRIP);
-			if (process.env.NODE_ENV === 'development') {
-				console.log(`Inputs.trip():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is tripped...`);
-				console.timeEnd(outputName.toString());
-				// console.timeLog('trip');
-			}
+
+			winston.log('info', `\t${outputName.toString()} operation completed.`);
+			// winston.stop_log(outputName.toString(), 'info', 'timer: ', '');
+
+			// if (process.env.NODE_ENV === 'development') {
+			// 	console.log(`Inputs.trip():\t${outputName} - \tGPIO${outputs.get(outputName)._gpio} is tripped...`);
+			// 	console.timeEnd(outputName.toString());
+			// 	// console.timeLog('trip');
+			// }
 		}, m76xx.tripOperationDelay);
 	}
 }

@@ -4,8 +4,8 @@
  * m76xxSetupClass.js
  *
  * Copyright (c) 2018-2019 Turgay Bircek
- * Version: 1.0.1
- * Date: 01/08/2019
+ * Version: 1.0.2
+ * Date: 01/23/2019
  *
  * Provides IO functionality of a Recloser.
  *
@@ -15,6 +15,11 @@
 
 // TODO: Add file reading system instead of hard coding pins.
 
+// the logger.
+var winston = require('../../winston');
+require('winston-timer')(winston);
+
+// provide async operations.
 var async = require('async');
 
 // GPIO control library.
@@ -49,26 +54,27 @@ class IOSetup {
 			if (this.direction === 'out') {
 				if (this.canOperate()) {
 					if (!this.outputs.has(this.name)) {
-						if (process.env.NODE_ENV === 'development') {
-							console.log('this OUTPUT is not defined yet');
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						// console.log('this OUTPUT is not defined yet');
+						winston.log('info', 'this output is not defined yet');
+						// }
 
 						// store in outputs set.
 						this.outputs.set(this.name, new Gpio(this.gpio, this.direction));
 
-						if (process.env.NODE_ENV === 'development') {
-							console.log(`\t\t Counting mapped outputs: ${this.outputs.size} and value: ${this.outputs.get(this.name)._gpio}.`);
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						winston.log('info', `\t\t Counting mapped outputs: ${this.outputs.size} and value: ${this.outputs.get(this.name)._gpio}.`);
+						// }
 
 						// start Position activated.
 						this.watchOutputs.call(this);
+						// this.outputs.get(this.selectOutput, this);
 					}
 					else {
-						// init here.
 						// start Position activated.
-						if (process.env.NODE_ENV === 'development') {
-							console.log(`\tWe are running --- this.direction === 'out') { ELSE breakerModel: ${this.m76xx.breakerModel} and startPosition: ${this.m76xx.startPosition}.`);
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						winston.log('info', `\tWe are running --- this.direction === 'out') { ELSE breakerModel: ${this.m76xx.breakerModel} and startPosition: ${this.m76xx.startPosition}.`);
+						// }
 						if (this.canOperate()) {
 							this.watchOutputs.call(this);
 						}
@@ -78,16 +84,16 @@ class IOSetup {
 			else if (this.direction === 'in') {
 				if (this.canOperate()) {
 					if (!this.inputs.has(this.name)) {
-						if (process.env.NODE_ENV === 'development') {
-							console.log('this INPUT is not defined yet');
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						winston.log('info', 'this INPUT is not defined yet');
+						// }
 						this.inputs.set(this.name, new Gpio(this.gpio, this.direction, edge, {
 							debounceTimeout: debounceTimeout
 						}));
 
-						if (process.env.NODE_ENV === 'development') {
-							console.log(`\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)} debounceTimeout: ${debounceTimeout} msec.`);
-						}
+						// if (process.env.NODE_ENV === 'development') {
+						winston.log('info', `\t\t Counting mapped inputs: ${this.inputs.size} and value: ${this.inputs.get(this.name)._gpio} and exists: ${this.inputs.has(this.name)} debounceTimeout: ${debounceTimeout} msec.`);
+						// }
 
 						let myThis = this;
 
@@ -97,7 +103,9 @@ class IOSetup {
 								throw err;
 							}
 
-							console.time('start');
+							// if (process.env.NODE_ENV === 'development') {
+							// 	console.time('start');
+							// }
 							async.parallel(this.speak());
 							async.parallel(this.outputs.forEach(this.selectOutput, myThis));
 
@@ -106,22 +114,22 @@ class IOSetup {
 				}
 			}
 			else if (this.direction === 'update') {
-				if (process.env.NODE_ENV === 'development') {
-					console.log(`\t\t User updated values are available.`);
-				}
+				// if (process.env.NODE_ENV === 'development') {
+				winston.log('info', `\t\t User updated values are available.`);
+				// }
 
 				// the user changed something that effects only the outputs re-initialize immediately.
 				this.watchOutputs.call(this);
 			}
 			else {
-				if (process.env.NODE_ENV === 'development') {
-					console.log(`\t\t Sorry there is no ${this.direction} available.`);
-				}
+				// if (process.env.NODE_ENV === 'development') {
+				winston.log('error', `\t\t Sorry there is no ${this.direction} available.`);
+				// }
 			}
 		}
 		else {
 			writeSync: (value) => {
-				console.log('virtual led now uses value: ' + value);
+				winston.log('info', `virtual led now uses value: ${value}`);
 			};
 		}
 	}
@@ -129,15 +137,15 @@ class IOSetup {
 	// handles initial and user updated startPositions of Outputs.
 	watchOutputs() {
 		if (Gpio.accessible) {
-			if (process.env.NODE_ENV === 'development') {
-				console.log(`Setup Class.watchOutputs() is running:`);
-				console.log(`name: ${this.name} is running.`);
-				console.log(`startPosition: ${this.m76xx.startPosition} is position.`);
-				console.log(`breakerModel: ${this.m76xx.breakerModel} is model.`);
-				console.log(`operationMode: ${this.m76xx.operationMode} is mode.`);
-				console.log(`closeOperationDelay: ${this.m76xx.closeOperationDelay} is close delay.`);
-				console.log(`tripOperationDelay: ${this.m76xx.tripOperationDelay} is trip delay.`);
-			}
+			// if (process.env.NODE_ENV === 'development') {
+			winston.log('info', `Setup Class.watchOutputs() is running:`);
+			winston.log('info', `name: ${this.name} is running.`);
+			winston.log('info', `startPosition: ${this.m76xx.startPosition} is position.`);
+			winston.log('info', `breakerModel: ${this.m76xx.breakerModel} is model.`);
+			winston.log('info', `operationMode: ${this.m76xx.operationMode} is mode.`);
+			winston.log('info', `closeOperationDelay: ${this.m76xx.closeOperationDelay} is close delay.`);
+			winston.log('info', `tripOperationDelay: ${this.m76xx.tripOperationDelay} is trip delay.`);
+			// }
 
 			// if (this.canOperate()) {
 			// 	if (process.env.NODE_ENV === 'development') {
@@ -150,7 +158,7 @@ class IOSetup {
 		}
 		else {
 			writeSync: (value) => {
-				console.log('virtual led now uses value: ' + value);
+				winston.log('info', `virtual led now uses value: ${value}`);
 			};
 		}
 	}
@@ -187,20 +195,22 @@ class IOSetup {
 	unexport() {
 		switch (this.direction) {
 			case 'in':
-				// code
-				this.inputs.get(this.name).unexport();
+				if (this.canOperate) {
+					this.inputs.get(this.name).unexport();
+				}
 				break;
 
 			case 'out':
-				// code
-				this.outputs.get(this.name).unexport();
+				if (this.canOperate) {
+					this.outputs.get(this.name).unexport();
+				}
 				break;
 			default:
 				// code
 		}
-		if (process.env.NODE_ENV === 'development') {
-			console.log(`Gpio.unexport():\t${this.name} - GPIO${this.gpio} is deleted...`);
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		winston.log('info', `Gpio.unexport():\t${this.name} - GPIO${this.gpio} is deleted...`);
+		// }
 	}
 
 	// Stop watching for hardware interrupts on the GPIO.
@@ -211,17 +221,17 @@ class IOSetup {
 		}
 		else {
 			this.inputs.get(this.name).unwatch();
-			if (process.env.NODE_ENV === 'development') {
-				console.log(`Inputs:\t${this.name} - GPIO${this.gpio} no longer monitored...`);
-			}
+			// if (process.env.NODE_ENV === 'development') {
+			winston.log('info', `Inputs:\t${this.name} - GPIO${this.gpio} no longer monitored...`);
+			// }
 		}
 	}
 
 	// prints some info about Gpios.
 	speak() {
-		if (process.env.NODE_ENV === 'development') {
-			console.log(`${IOSetup.name} CLASS TALKS: Input changed detected: \t\t${this.name}`);
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		winston.log('info', `${IOSetup.name} CLASS TALKS: Input changed detected: \t\t${this.name}`);
+		// }
 	}
 
 	selectOutput(value, key, map) {
@@ -235,10 +245,13 @@ class IOSetup {
 			outputName = key.toString();
 			opDirection = this.m76xx.startPosition;
 		}
+
+		winston.log('info', `\t${key.toString()} operation starts.`);
+		// winston.start_log(key.toString(), 'info');
 		// to show passing every key.
-		if (process.env.NODE_ENV === 'development') {
-			console.time(key.toString());
-		}
+		// if (process.env.NODE_ENV === 'development') {
+		// 	console.time(key.toString());
+		// }
 
 		if ((this.m76xx.breakerModel.includes('52a only') || this.m76xx.breakerModel === '52a, 52b') && (key.toString().endsWith('52a'))) {
 			if (key.toString().startsWith(outputName)) {
@@ -278,9 +291,11 @@ class IOSetup {
 				}
 			}
 			else {
-				if (process.env.NODE_ENV === 'development') {
-					console.timeEnd(key.toString());
-				}
+				winston.stop_log(key.toString(), 'info');
+				winston.log('error', `unexpected key.toString() value: ${key.toString()}`);
+				// if (process.env.NODE_ENV === 'development') {
+				// console.timeEnd(key.toString());
+				// }
 			}
 		}
 	}
