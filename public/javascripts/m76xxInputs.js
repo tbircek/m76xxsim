@@ -118,8 +118,8 @@ class Inputs extends IOSetup {
 		// winston.start_log(outputName.toString(), 'info');
 		setTimeout(function() {
 
-			outputs.get(outputName).writeSync(CLOSE);
-			// outputs.get(outputName).write(CLOSE);
+			// outputs.get(outputName).writeSync(CLOSE);
+			outputs.get(outputName).write(CLOSE);
 
 			winston.log('info', `\t${outputName.toString()} operation completed.`);
 			// winston.stop_log(outputName.toString(), 'info');
@@ -138,8 +138,8 @@ class Inputs extends IOSetup {
 		// winston.start_log(outputName.toString(), 'info');
 		setTimeout(function() {
 
-			outputs.get(outputName).writeSync(TRIP);
-			// outputs.get(outputName).write(TRIP);
+			// outputs.get(outputName).writeSync(TRIP);
+			outputs.get(outputName).write(TRIP);
 
 			winston.log('info', `\t${outputName.toString()} operation completed.`);
 			// winston.stop_log(outputName.toString(), 'info', 'timer: ', '');
