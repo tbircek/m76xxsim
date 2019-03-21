@@ -291,7 +291,7 @@ class IOSetup {
 				}
 			}
 			else {
-				winston.stop_log(key.toString(), 'info');
+				// winston.stop_log(key.toString(), 'info');
 				winston.log('error', `unexpected key.toString() value: ${key.toString()}`);
 				// if (process.env.NODE_ENV === 'development') {
 				// console.timeEnd(key.toString());
