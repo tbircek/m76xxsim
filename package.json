@@ -8,7 +8,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "devstart": "NODE_ENV=development nodemon ./bin/www",
-    "lint": "eslint ./javascripts"
+    "test": "nyc --reporter=html --reporter=text mocha"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -28,6 +28,8 @@
     "winston-timer": "^0.1.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.6"
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.6",
+    "nyc": "^13.3.0"
   }
 }
