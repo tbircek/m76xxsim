@@ -79,7 +79,7 @@ function IOInit() {
 	// update the log.
 	winston.log('info', 'program inits...');
 
-	lcd.clear;
+	// lcd.clear;
 	/*********************************
 	 * 
 	 * Input items.
@@ -204,10 +204,11 @@ function unexportAll() {
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
-	winston.log('info', `exiting the program...`);
 	unexportAll();
-	// lcd.close();
-	process.exit();
+	setTimeout((function() {
+		winston.log('info', `\tSIMULATOR HAS ENDED...`);
+		return process.exit(0);
+	}), 1000);
 });
 
 process.on('uncaughtException', function(err) {
