@@ -2,10 +2,9 @@
 
 /*
  * labelsController.js
- *
- * Copyright (c) 2018-2019 Turgay Bircek
- * Version: 1.0.0
- * Date: 01/08/2019
+ * Author: Turgay Bircek
+ * Version: 1.0.1
+ * Date: 04/10/2019
  *
  * Provides interaction between user and the web server.
  *
@@ -14,7 +13,7 @@
 // reference to hardware control and initializations.
 let sim = require('../public/javascripts/m76xxsim');
 let title = 'Recloser Simulator';
-let ver = `${process.env.NODE_ENV} --- v2018.12.17`;
+let ver = `${process.env.NODE_ENV} --- v2018.04.10`;
 // INDEX page.
 exports.index = function(req, res) {
 
@@ -37,7 +36,7 @@ exports.index = function(req, res) {
 		startPosition: ['Close', 'Trip'],
 		submitButton: 'Update',
 		infoButton: 'Monitor',
-		defaultValues: [60, 60]
+		defaultValues: [0, 0]
 	});
 };
 

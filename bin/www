@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
+/* www
+ * 
+ * Version: 1.0.1
+ * Date: 04/15/2019
+ * 
+ *
  */
+
 
 var app = require('../app');
 // var debug = require('debug')('m76xxsim:server');
@@ -13,7 +18,7 @@ var winston = require('../winston');
  * Get port from environment and store in Express.
  */
 
-var port = '8081'; // normalizePort(process.env.PORT || '9090'); // 
+var port = normalizePort(process.env.PORT || 8081);
 app.set('port', port);
 
 /**
@@ -34,21 +39,21 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-// function normalizePort(val) {
-//   var port = parseInt(val, 10);
+function normalizePort(val) {
+  var port = parseInt(val, 10);
 
-//   if (isNaN(port)) {
-//     // named pipe
-//     return val;
-//   }
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
-//   if (port >= 0) {
-//     // port number
-//     return port;
-//   }
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
-//   return false;
-// }
+  return false;
+}
 
 /**
  * Event listener for HTTP server "error" event.

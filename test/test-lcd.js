@@ -2,15 +2,13 @@
 
 /* test.js
  * Author: Turgay Bircek
- * Version: 1.0.1
- * Date: 04/05/2019
+ * Version: 1.0.0
+ * Date: 03/25/2019
  * 
- * Provides test.
+ * Provides lcd test.
  *
  */
 
-var assert = require('assert');
-const Gpio = require('onoff').Gpio; // Gpio class
 const lcd = require('../public/javascripts/lcd'); // Lcd class
 // the logger.
 var winston = require('../winston');
@@ -18,20 +16,6 @@ var winston = require('../winston');
 before(done => {
     winston.log('info', 'test started ...');
     done();
-});
-
-describe('OnOff', function() {
-    describe('#accessible', function() {
-        it('should return true when installed correctly.', function() {
-            assert.equal(Gpio.accessible, true);
-        });
-    });
-
-    describe('#testIndividualPorts', function() {
-        // pending test
-        it('should turn high/low test gpio.');
-    });
-
 });
 
 describe('lcd', function() {

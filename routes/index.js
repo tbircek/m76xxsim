@@ -3,12 +3,13 @@ var router = express.Router();
 var settings_controller = require('../controllers/labelsController');
 
 // test route to make sure everything is working (accessed at GET http://localhost:8081/)
-router.get('/', function(req, res, next) {
+// router.get('/', function(req, res, next) {
 
-	res.json({ message: 'm76xxsim server is up and running. Please proceed to http://hostipaddress:8081/m76xxsim' });
-});
+// 	res.json({ message: `m76xxsim server is up and running. Please proceed to http://hostipaddress:8081/m76xxsim` });
+// });
 
-router.route('/m76xxsim')
+// router.route('/m76xxsim')
+router.route('/')
 
 	.post(function(req, res, next) {
 		res.json({ message: 'POST function is not supported' });

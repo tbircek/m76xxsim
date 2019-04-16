@@ -1,14 +1,22 @@
 {
   "name": "m76xxsim",
-  "version": "1.0.0",
+  "description": "",
+  "version": "1.0.1",
   "engine": {
     "node": "v6.14.4"
   },
+  "keywords": [],
+  "author": "tubber",
+  "license": "ISC",
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "devstart": "NODE_ENV=development nodemon ./bin/www",
-    "test": "nyc --reporter=html --reporter=text mocha"
+    "test": "NODE_ENV=development NODE_PORT=8081 nyc --reporter=html --reporter=text mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/tbircek/m76xxsim.git"
   },
   "dependencies": {
     "async": "^2.6.1",
