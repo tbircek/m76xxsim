@@ -1,0 +1,7 @@
+# ignore following folders
+node_modules
+logs
+
+# ignore test result folders
+.nyc_output
+coverage
