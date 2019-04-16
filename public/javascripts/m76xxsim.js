@@ -79,7 +79,6 @@ function IOInit() {
 	// update the log.
 	winston.log('info', 'program inits...');
 
-	lcd.clear;
 	/*********************************
 	 * 
 	 * Input items.
@@ -105,7 +104,7 @@ function IOInit() {
 	PhB_Close.init();
 	PhC_Trip.init();
 	PhC_Close.init();
-	
+
 	winston.log('info', 'Input initialization completed.');
 
 	/*********************************
@@ -171,7 +170,7 @@ function IOInit() {
 	// lcd();
 }
 
-// once ran no possiblity of using same gpio ports.
+// once ran no possibility of using same gpio ports.
 // run it before stopping program.
 function unexportAll() {
 	PhA_Close.unexport();
@@ -199,15 +198,17 @@ function unexportAll() {
 		PhC_52b.unexport();
 	}
 
-	winston.log('info', `operationMode ... ${PhA_Trip.getOperationMode()}`);
+	winston.log('info', `Trip OperationMode ... ${PhA_Trip.getOperationMode()}`);
+	winston.log('info', `Close OperationMode ... ${PhA_Close.getOperationMode()}`);
 }
 
 // If ctrl+c is hit, free resources and exit.
 process.on('SIGINT', function() {
-	winston.log('info', `exiting the program...`);
 	unexportAll();
-	// lcd.close();
-	process.exit();
+	setTimeout((function() {
+		winston.log('info', `\tSIMULATOR HAS ENDED...`);
+		return process.exit(0);
+	}), 1000);
 });
 
 process.on('uncaughtException', function(err) {

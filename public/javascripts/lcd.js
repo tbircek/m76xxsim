@@ -2,8 +2,8 @@
 
 /* lcd.js
  * Author: Turgay Bircek
- * Version: 1.0.1
- * Date: 01/23/2019
+ * Version: 1.0.3
+ * Date: 04/10/2019
  * 
  * Provides interaction to LCD.
  *
@@ -39,29 +39,30 @@ const columnStartPosition = 0;
 
 // prints specified message on the lcd.
 var lcdPrint = function(message) {
-  // clear lcd.
-  lcd.clear();
 
   // split message to two rows by new line.
   var lines = message.split(/\n/);
 
-  // set cursor location to first row on the lcd.
-  lcd.setCursor(columnStartPosition, firstRow);
+  // clear lcd.
+  lcd.clear();
 
-  // print first row on the lcd.
-  lcd.print(lines[firstRow], function(err) {
-    if (err) {
-      throw err;
-    }
+  lcd.once('clear', () => {
+    lcd.home();
+    lcd.once('home', () => {
 
-    // set cursor location to second row on the lcd.
-    lcd.setCursor(columnStartPosition, secondRow);
+      // set cursor location to first row on the lcd.
+      lcd.setCursor(columnStartPosition, firstRow);
 
-    // print second row on the lcd.
-    lcd.print(lines[secondRow], function(err) {
-      if (err) {
-        throw err;
-      }
+      // print first row on the lcd.
+      lcd.print(lines[firstRow]);
+
+      lcd.once('printed', () => {
+        // set cursor location to second row on the lcd.
+        lcd.setCursor(columnStartPosition, secondRow);
+
+        // print second row on the lcd.
+        lcd.print(lines[secondRow]);
+      });
     });
   });
 };
@@ -71,25 +72,35 @@ lcd.on('ready', function() {
 
   // clear lcd.
   lcd.clear();
-
-  // set cursor location.
-  lcd.setCursor(0, 0);
-
-  // print default message.
-  lcdPrint(misc.defaultMessage(), 0, 0);
-
-  // update console.
-  // console.log('lcd initialized...');
+  lcd.once('clear', () => {
+    lcd.home();
+    lcd.once('home', () => {
+      lcdPrint(misc.defaultMessage());
+    });
+  });
   winston.log('info', 'lcd initialized...');
 });
 
 // If ctrl+c is hit, free resources and exit.
-process.on('SIGINT', () => {
-  lcd.clear();
-  lcd.close();
-  // console.log(`deleting LCD resources...`);
+process.on('SIGINT', handle);
+
+// kill command is invoked without any parameter.
+process.on('SIGTERM', handle);
+
+// handles signals.
+function handle() {
+
+  lcdPrint('M76xx Simulator\nhas stopped.');
   winston.log('info', 'deleting LCD resources...');
-});
+
+  setTimeout((function() {
+    lcd.close();
+    return process.exit(0);
+  }), 2000);
+}
 
 // export lcdPrint function.
-module.exports = lcdPrint;
+module.exports = {
+  lcdPrint //,
+  // clear
+};
