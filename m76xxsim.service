@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Beckwith Recloser Simulator
-After=network.target
+After=haproxy.service
 
 [Service]
 Environment=NODE_ENV=production
