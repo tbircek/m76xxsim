@@ -44,7 +44,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     $ sudo mv haproxy.cfg /etc/haproxy    
     $ systemctl status haproxy.service    
     $ sudo systemctl start haproxy.service
-    ```
+   ```
 
 8. Move [m76xxsim.service](m76xxsim/m76xxsim.service) to /lib/systemd/system folder.   
     ```
