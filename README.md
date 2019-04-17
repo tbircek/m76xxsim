@@ -14,7 +14,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     https://beagleboard.org/getting-started#update
     ```
 
-2. Connect Beaglebone to internet and clone [this](https://bitbucket.org/tbircek/m76xxsim.git) repository. 
+2. Connect Beaglebone to internet and clone [this](https://bitbucket.org/tbircek/m76xxsim.git) repository.   
     ``` 
     git clone https://bitbucket.org/tbircek/m76xxsim.git
     ```
@@ -24,7 +24,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     npm install
     ```
 
-4. Set time zone. Default is UTC. (Rescloser Simulator will log various information for debugging purposes.)   
+4. Set time zone for logging.   
     ```
     $ sudo timedatectl set-timezone America/New_York
     ```
@@ -34,15 +34,19 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     npm test
     ```
 
-6. Follow instructions to install [HAProxy](https://haproxy.debian.net) a reverse proxy. The latest available version was v1.7.5-2 at the time of this writing.   
+6. Follow instructions to install [HAProxy](https://haproxy.debian.net). (currently v1.7.5-2).   
     ```
     https://haproxy.debian.net
     ```
 
 7. Move [haproxy.cfg](m76xxsim/haproxy.cfg) to /etc/haproxy folder and verify HAProxy service started if not start the service.   
     ```
-    $ sudo mv haproxy.cfg /etc/haproxy    
+    $ sudo mv haproxy.cfg /etc/haproxy
+    ```
+    ```
     $ systemctl status haproxy.service
+    ```
+    ```
     $ sudo systemctl start haproxy.service
     ```
 
@@ -66,7 +70,8 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     $ sudo reboot now
     ```
 
-12. After reboot completed connect to Beaglebone using a browser with ipaddress presented on LCD. (Initial web page load could take up to 20 seconds.)
+12. After reboot completed connect to Beaglebone using a browser with ipaddress presented on LCD.  
+(Initial web page load could take up to 20 seconds.)
 
 ### Contact Us ###
 
