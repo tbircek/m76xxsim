@@ -25,7 +25,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     ```
 
 4. Set time zone for logging.   
-    ```Shell
+    ```
     $ sudo timedatectl set-timezone America/New_York
     ```
 
@@ -40,19 +40,17 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     ```
 
 7. Move [haproxy.cfg](m76xxsim/haproxy.cfg) to /etc/haproxy folder and verify HAProxy service started if not start the service.   
-    ```Shell
-    $ sudo mv haproxy.cfg /etc/haproxy    
-    $ systemctl status haproxy.service    
-    $ sudo systemctl start haproxy.service
-   ```
+    ```$ sudo mv haproxy.cfg /etc/haproxy```   
+    ```$ systemctl status haproxy.service```   
+    ```$ sudo systemctl start haproxy.service```
 
 8. Move [m76xxsim.service](m76xxsim/m76xxsim.service) to /lib/systemd/system folder.   
-    ```Shell
+    ```
     $ sudo mv m76xxsim.service /lib/systemd/system
     ```
     
 9. Reload systemd manager configuration.  
-    ```Shell
+    ```
     $ sudo systemctl daemon-reload
     ```
 
@@ -62,7 +60,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     ```
 
 11. Restart Beaglebone.   
-    ```Shell
+    ```
     $ sudo reboot now
     ```
 
