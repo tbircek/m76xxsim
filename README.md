@@ -27,7 +27,8 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
 3. Connect Beaglebone to internet and clone [this](https://bitbucket.org/tbircek/m76xxsim.git) repository.   
     ```git clone https://bitbucket.org/tbircek/m76xxsim.git```   
 
-4. Install required npm modules.   
+4. Change the directory and install required npm modules.   
+    ```$ cd m76xxsim/```   
     ```npm install```   
 
 5. Set time zone for logging.   
@@ -36,7 +37,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
 6. Verify required node modules installed correctly.   
     ```npm test```   
 
-7. Follow instructions to install [HAProxy](https://haproxy.debian.net). (currently v1.7.5-2).   
+7. Follow instructions to install stable release of [HAProxy](https://haproxy.debian.net). (currently v1.7.5-2).   
     ```https://haproxy.debian.net```   
 
 8. Move [haproxy.cfg](m76xxsim/haproxy.cfg) to /etc/haproxy folder and verify HAProxy service started if not start the service.   
