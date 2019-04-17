@@ -5,6 +5,7 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
 ### What will you need? ###
 
 * [Beaglebone](https://beagleboard.org/black)
+* [Red Board](https://easyeda.com/tbircek_beckwith/m76xxsim)
 
 
 ### Preparing Beaglebone for Recloser Simulator: ###
