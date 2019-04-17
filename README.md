@@ -65,7 +65,8 @@ A recloser is an automatic, high-voltage electric switch. Like a circuit breaker
     ```
 
 12. After reboot completed connect to Beaglebone using a browser with ipaddress presented on LCD.  
-(Initial web page load could take up to 20 seconds.)
+(Initial web page load could take up to 20 seconds.)   
+```http://localhostipaddress```
 
 ### Contact Us ###
 
