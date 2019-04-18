@@ -187,7 +187,10 @@ function unexportAll() {
 	Neu_Gnd_Cls.unexport();
 	Neu_Gnd_Opn.unexport();
 
-	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
+	winston.log('info', `PhB_Close is ${PhB_Close.getOperationMode()} ...`);
+	
+	// if ( typeof PhB_Close !== 'undefined' ) {
 		PhB_Close.unexport();
 		PhB_Trip.unexport();
 		PhB_52a.unexport();
@@ -196,24 +199,39 @@ function unexportAll() {
 		PhC_Trip.unexport();
 		PhC_52a.unexport();
 		PhC_52b.unexport();
-	}
+	// }	
+		
+	// }
 
-	winston.log('info', `Trip OperationMode ... ${PhA_Trip.getOperationMode()}`);
-	winston.log('info', `Close OperationMode ... ${PhA_Close.getOperationMode()}`);
+	winston.log('info', `unexport completed.`);
+	// winston.log('info', `Close OperationMode ... ${PhA_Close.getOperationMode()}`);
 }
 
 // If ctrl+c is hit, free resources and exit.
-process.on('SIGINT', function() {
-	unexportAll();
+process.on('SIGINT', handle);
+
+// kill command is invoked without any parameter.
+process.on('SIGTERM', handle);
+
+// handles signals.
+function handle() {
+  
 	setTimeout((function() {
+		unexportAll();
 		winston.log('info', `\tSIMULATOR HAS ENDED...`);
 		return process.exit(0);
-	}), 1000);
-});
+	}), 500);
+}
 
-process.on('uncaughtException', function(err) {
-	winston.log('error', err);
-});
+// // If ctrl+c is hit, free resources and exit.
+// process.on('SIGINT', function() {
+// 	unexportAll();
+// 	setTimeout((function() {
+// 		winston.log('info', `\tSIMULATOR HAS ENDED...`);
+// 		return process.exit(0);
+// 	}), 1000);
+// });
+
 
 // call by the user interactions in webpage.
 function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, userCloseOperationDelay, userTripOperationDelay) {
@@ -226,7 +244,7 @@ function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, user
 	// if (process.env.NODE_ENV === 'development') {
 	winston.log('info', `we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
 	// }
-
+	
 	// initialize every gpio ports again.
 	IOInit.call(this);
 }

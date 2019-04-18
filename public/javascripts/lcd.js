@@ -95,7 +95,7 @@ function handle() {
 
   setTimeout((function() {
     lcd.close();
-    return process.exit(0);
+    // return process.exit(0);
   }), 2000);
 }
 
