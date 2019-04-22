@@ -57,7 +57,7 @@ Like a circuit breaker on household electric lines, it shuts off electric power 
     ```systemctl status haproxy.service```   
     ```sudo systemctl start haproxy.service```   
 
-12. Move [m76xxsim.service](https://bitbucket.org/tbircek/m76xxsim/src/m76xxsim.service) to "/lib/systemd/system" folder.   
+12. Move [m76xxsim.service](https://bitbucket.org/tbircek/m76xxsim/src/master/m76xxsim.service) to "/lib/systemd/system" folder.   
     ```sudo mv m76xxsim.service /lib/systemd/system```   
 
 13. Reload systemd manager configuration.  
