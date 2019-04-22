@@ -45,31 +45,28 @@ Like a circuit breaker on household electric lines, it shuts off electric power 
 8. Verify required node modules installed correctly.   
     ```npm test```   
 
-9. Delete test logs.   
-    ```sudo rm -rf /var/lib/cloud9/m76xxsim/public/logs```   
-
-10. Install [HAProxy](https://haproxy.debian.net) is a reverse proxy allows the server to run on port 80.   
+9. Install [HAProxy](https://haproxy.debian.net) is a reverse proxy allows the server to run on port 80.   
     ```sudo apt-get update```   
     ```sudo apt-get install haproxy=1.7.\*```   
     
-11. Move [haproxy.cfg](https://bitbucket.org/tbircek/m76xxsim/src/master/haproxy.cfg) to "/etc/haproxy" folder and verify HAProxy service started if not start the service.   
+10. Move [haproxy.cfg](https://bitbucket.org/tbircek/m76xxsim/src/master/haproxy.cfg) to "/etc/haproxy" folder and verify HAProxy service started if not start the service.   
     ```sudo mv haproxy.cfg /etc/haproxy```   
     ```systemctl status haproxy.service```   
     ```sudo systemctl start haproxy.service```   
 
-12. Move [m76xxsim.service](https://bitbucket.org/tbircek/m76xxsim/src/master/m76xxsim.service) to "/lib/systemd/system" folder.   
+11. Move [m76xxsim.service](https://bitbucket.org/tbircek/m76xxsim/src/master/m76xxsim.service) to "/lib/systemd/system" folder.   
     ```sudo mv m76xxsim.service /lib/systemd/system```   
 
-13. Reload systemd manager configuration.  
+12. Reload systemd manager configuration.  
     ```sudo systemctl daemon-reload```   
 
-14. Enable M76xxsim service to automatically start on boot.   
+13. Enable M76xxsim service to automatically start on boot.   
     ```sudo systemctl enable m76xxsim.service```   
 
-15. Restart Beaglebone.   
+14. Restart Beaglebone.   
     ```sudo shutdown -r now```   
 
-16. After reboot completed connect to Beaglebone using a browser with ipaddress presented on LCD.  
+15. After reboot completed connect to Beaglebone using a browser with ipaddress presented on LCD.  
 (Initial web page load could take up to 20 seconds.)   
     ```http://localhostipaddress```   
 
