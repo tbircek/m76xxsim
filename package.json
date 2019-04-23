@@ -1,13 +1,13 @@
 {
   "name": "m76xxsim",
-  "description": "",
+  "description": "A simulator for a recloser is an automatic, high-voltage electric switch. Like a circuit breaker on household electric lines, it shuts off electric power when trouble occurs, such as a short circuit.",
   "version": "1.0.1",
   "engine": {
     "node": "v6.14.4"
   },
   "keywords": [],
   "author": "tubber",
-  "license": "ISC",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/tbircek/m76xxsim.git"
+    "url": "git+https://bitbucket.org/tbircek/m76xxsim.git"
   },
   "dependencies": {
     "async": "^2.6.1",
@@ -39,5 +39,10 @@
     "mocha": "^6.0.2",
     "nodemon": "^1.18.6",
     "nyc": "^13.3.0"
+  },
+  "homepage": "https://bitbucket.org/tbircek/m76xxsim#readme",
+  "main": "/var/lib/cloud9/m76xxsim/bin/www",
+  "directories": {
+    "test": "test"
   }
 }
