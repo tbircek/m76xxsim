@@ -2,8 +2,8 @@
 
 /* m76xxsim.js
  * Author: Turgay Bircek
- * Version: 1.0.3
- * Date: 01/23/2019
+ * Version: 1.0.4
+ * Date: 04/30/2019
  * 
  * Provides main entry for M76xx Simulator program
  *
@@ -35,6 +35,7 @@ var winston = require('../../winston');
 // interface to inputs/oututs of beaglebone black.
 let setInputs = require('./m76xxInputs').Inputs;
 
+const delay = (time) => new Promise(resolve => setTimeout(resolve, time));
 
 // Input variables.
 let PhA_Close;
@@ -47,14 +48,15 @@ let PhC_Trip;
 // Output variables.
 let PhA_52a;
 let PhA_52b;
-let PhA_Cls;
-let PhA_Opn;
 let PhB_52a;
 let PhB_52b;
-let PhB_Cls;
-let PhB_Opn;
 let PhC_52a;
 let PhC_52b;
+
+let PhA_Opn;
+let PhA_Cls;
+let PhB_Cls;
+let PhB_Opn;
 let PhC_Cls;
 let PhC_Opn;
 let Neu_Gnd_Cls;
@@ -187,10 +189,7 @@ function unexportAll() {
 	Neu_Gnd_Cls.unexport();
 	Neu_Gnd_Opn.unexport();
 
-	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
-	winston.log('info', `PhB_Close is ${PhB_Close.getOperationMode()} ...`);
-	
-	// if ( typeof PhB_Close !== 'undefined' ) {
+	if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
 		PhB_Close.unexport();
 		PhB_Trip.unexport();
 		PhB_52a.unexport();
@@ -199,12 +198,13 @@ function unexportAll() {
 		PhC_Trip.unexport();
 		PhC_52a.unexport();
 		PhC_52b.unexport();
-	// }	
-		
-	// }
+	}
 
-	winston.log('info', `unexport completed.`);
-	// winston.log('info', `Close OperationMode ... ${PhA_Close.getOperationMode()}`);
+	winston.log('info', `Trip OperationMode ... ${PhA_Trip.getOperationMode()}`);
+	winston.log('info', `Close OperationMode ... ${PhA_Close.getOperationMode()}`);
+	
+	lcd.lcd.close();
+	
 }
 
 // If ctrl+c is hit, free resources and exit.
@@ -215,23 +215,27 @@ process.on('SIGTERM', handle);
 
 // handles signals.
 function handle() {
-  
-	setTimeout((function() {
-		unexportAll();
-		winston.log('info', `\tSIMULATOR HAS ENDED...`);
-		return process.exit(0);
-	}), 500);
+
+  Promise.resolve()
+    .then(() => lcd.lcdPrint('M76xx Simulator\nhas stopped.'))
+    .then(() => winston.log('info', 'deleting LCD resources...'))
+    .then(() => delay(1000))		// allows lcd to show final message.
+    .then(() => unexportAll())	// release all resources.
+    .then(() => winston.log('info', `\t----- simulation ends -----`))
+    // .then(() => delay(100))			// allows log write complete.
+    .then(() => process.exit(0));
+
 }
 
-// // If ctrl+c is hit, free resources and exit.
-// process.on('SIGINT', function() {
-// 	unexportAll();
-// 	setTimeout((function() {
-// 		winston.log('info', `\tSIMULATOR HAS ENDED...`);
-// 		return process.exit(0);
-// 	}), 1000);
-// });
+process.on('unhandledRejection', (reason, promise) => {
+	winston.log('error', reason.stack || reason);
+	// Recommended: send the information to sentry.io
+	// or whatever crash reporting service you use
+});
 
+process.on('uncaughtException', function(err) {
+	winston.log('error', err);
+});
 
 // call by the user interactions in webpage.
 function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, userCloseOperationDelay, userTripOperationDelay) {
@@ -244,7 +248,7 @@ function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, user
 	// if (process.env.NODE_ENV === 'development') {
 	winston.log('info', `we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
 	// }
-	
+
 	// initialize every gpio ports again.
 	IOInit.call(this);
 }

@@ -2,8 +2,8 @@
 
 /* lcd.js
  * Author: Turgay Bircek
- * Version: 1.0.3
- * Date: 04/10/2019
+ * Version: 1.0.4
+ * Date: 04/30/2019
  * 
  * Provides interaction to LCD.
  *
@@ -50,9 +50,6 @@ var lcdPrint = function(message) {
     lcd.home();
     lcd.once('home', () => {
 
-      // set cursor location to first row on the lcd.
-      lcd.setCursor(columnStartPosition, firstRow);
-
       // print first row on the lcd.
       lcd.print(lines[firstRow]);
 
@@ -81,26 +78,8 @@ lcd.on('ready', function() {
   winston.log('info', 'lcd initialized...');
 });
 
-// If ctrl+c is hit, free resources and exit.
-process.on('SIGINT', handle);
-
-// kill command is invoked without any parameter.
-process.on('SIGTERM', handle);
-
-// handles signals.
-function handle() {
-
-  lcdPrint('M76xx Simulator\nhas stopped.');
-  winston.log('info', 'deleting LCD resources...');
-
-  setTimeout((function() {
-    lcd.close();
-    // return process.exit(0);
-  }), 2000);
-}
-
-// export lcdPrint function.
+// export lcd function.
 module.exports = {
-  lcdPrint //,
-  // clear
+  lcdPrint,
+  lcd
 };
