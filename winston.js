@@ -17,8 +17,13 @@ const { transports, createLogger, format } = require('winston');
 const logDirectory = path.join(__dirname, 'public/logs');
 // const fileName = path.join(logDirectory, 'logfile.log');
 
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+try {
+  // ensure log directory exists
+  fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+}
+catch (e) {
+  console.error('failed to create log folder.\nrun "npm test"', e.message);
+}
 
 var options = {
   logFile: {
