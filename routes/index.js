@@ -17,6 +17,13 @@ router.route('/')
 	})
 
 	.get(function(req, res, next) {
+
+		// client ipaddress
+		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+		// log info to the syslog.
+		console.info(`a client connection from ipaddress:${ip}`);
+
 		// page refresh. 
 		if (req.query.breakerModel === undefined) {
 			// send index page
@@ -30,6 +37,8 @@ router.route('/')
 
 	.put(function(req, res, next) {
 		// console.log('PUT active');
+		console.info(`user changed following: startPosition: ${req.query.startPosition}. \tbreakerModel: ${req.query.breakerModel}.\toperationMode: ${req.query.operationMode}.`);
+		
 		// send index page
 		settings_controller.settings_update_put(req, res);
 	});

@@ -9,12 +9,16 @@ var indexRouter = require('./routes/index');
 var compression = require('compression');
 
 // format app.log file output for easy reading.
-morgan.token('message', function getBreakerMolde(req, res) {
+morgan.token('message', function getBreakerModel(req, res) {
   var message = `\tbreakerModel: ${req.query.breakerModel}\tstartPosition: ${req.query.startPosition}\toperationMode: ${req.query.operationMode}\tcloseOperationDelay: ${req.query.closeOperationDelay}\ttripOperationDelay: ${req.query.tripOperationDelay} --- `;
   return message;
 });
 
 var app = express();
+
+
+// https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +32,16 @@ app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 app.use(morgan(':method :message :response-time', { stream: winston.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/javascripts')));
+
+// enable cross-origin resource sharing for a better error handling experience in React 16 and later.
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+// enable routes.
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

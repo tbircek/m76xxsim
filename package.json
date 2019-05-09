@@ -1,7 +1,7 @@
 {
   "name": "m76xxsim",
   "description": "A simulator for a recloser is an automatic, high-voltage electric switch. Like a circuit breaker on household electric lines, it shuts off electric power when trouble occurs, such as a short circuit.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "engine": {
     "node": "v6.14.4"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production node ./bin/www",
+    "start": "NODE_ENV=production PORT=8081 node ./bin/www",
     "devstart": "NODE_ENV=development PORT=8081 nodemon ./bin/www --trace-warnings",
     "test": "NODE_ENV=development PORT=8081 nyc --reporter=html --reporter=text mocha"
   },

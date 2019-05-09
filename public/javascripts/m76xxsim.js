@@ -162,14 +162,12 @@ function IOInit() {
 
 	PhA_52a.init();
 	PhA_52b.init();
-	// if (PhA_Trip.getOperationMode() !== '3trip 3lockout') {
 	PhB_52a.init();
 	PhB_52b.init();
 	PhC_52a.init();
 	PhC_52b.init();
-	// }
+	
 	winston.log('info', 'Output initialization completed.');
-	// lcd();
 }
 
 // once ran no possibility of using same gpio ports.
@@ -222,7 +220,6 @@ function handle() {
     .then(() => delay(1000))		// allows lcd to show final message.
     .then(() => unexportAll())	// release all resources.
     .then(() => winston.log('info', `\t----- simulation ends -----`))
-    // .then(() => delay(100))			// allows log write complete.
     .then(() => process.exit(0));
 
 }
@@ -247,7 +244,6 @@ function IOUserInit(userBreakerModel, userStartPosition, userOperationMode, user
 
 	// if (process.env.NODE_ENV === 'development') {
 	winston.log('info', `we are called.\twith following new values\n\tuserBreakerModel: ${userBreakerModel}\tuserStartPosition: ${userStartPosition}\tuserOperationMode: ${userOperationMode}\tuserCloseOperationDelay: ${userCloseOperationDelay}\tuserTripOperationDelay: ${userTripOperationDelay}`);
-	// }
 
 	// initialize every gpio ports again.
 	IOInit.call(this);

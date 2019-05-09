@@ -96,7 +96,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   // debug('Listening on ' + bind);
-  // console.log('The server running at http://localhost:' + addr.port);
+  console.log('The server running at http://localhost:' + addr.port);
   winston.log('info', `Listening on ${bind}`);
   winston.log('info', `The server running at http://localhost:${addr.port}`);
 }

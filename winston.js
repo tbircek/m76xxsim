@@ -36,16 +36,16 @@ var options = {
     colorize: true,
     localTime: true
   },
-  errFile: {
-    level: 'error',
-    filename: path.join(logDirectory, 'error.log'),
-    handleExceptions: true,
-    json: true,
-    maxsize: 524288, // 500KB
-    maxFiles: 10,
-    colorize: true,
-    localTime: true
-  },
+  // errFile: {
+  //   level: 'error',
+  //   filename: path.join(logDirectory, 'error.log'),
+  //   handleExceptions: true,
+  //   json: true,
+  //   maxsize: 524288, // 500KB
+  //   maxFiles: 10,
+  //   colorize: true,
+  //   localTime: true
+  // },
   console: {
     level: 'debug',
     handleExceptions: true,
@@ -67,9 +67,10 @@ const logger = createLogger({
     }),
     format.printf(info => `${info.timestamp} ${info.message}`)
   ),
+  defaultMeta: { service: 'm76xxsim' },
   transports: [
     new transports.File(options.logFile),
-    new transports.File(options.errFile)
+    // new transports.File(options.errFile)
   ],
   exceptionHandlers: [
     new transports.File({ filename: path.join(logDirectory, 'exceptions.log') })
